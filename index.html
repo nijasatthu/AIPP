@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>AIPP</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="AIPP" />
+<meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="browserNotice" class="browser-notice hidden">
+    <div><strong>👋 Chào bạn!</strong><span> Phúc chúc bạn một ngày làm việc nhiều năng lượng và xử lý thật nhiều khách 💗</span></div>
+    <button id="dismissBrowserNotice" class="notice-close">✕</button>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">P</div>
+        <div><h1>AIPP</h1><p>Trợ lý Telesale</p></div>
+      </div>
+      <nav>
+        <button class="nav-btn active" data-view="dashboard">📊 <span>Tổng quan</span></button>
+        <button class="nav-btn" data-view="customers">👥 <span>Khách</span></button>
+        <button class="nav-btn" data-view="followups">⏰ <span>Gọi lại</span></button>
+        <button class="nav-btn" data-view="automation">🤖 <span>Tự động</span></button>
+        <button class="nav-btn" data-view="templates">💬 <span>Mẫu tin</span></button>
+        <button class="nav-btn" data-view="settings">⚙️ <span>Cài đặt</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <label class="field compact"><span>Tên nhân viên</span><input id="agentName" placeholder="Ví dụ: Phúc" /></label>
+        <div class="side-buttons"><button id="exportBtn" class="secondary full">Xuất dữ liệu</button><label class="secondary full file-btn">Nhập dữ liệu<input id="importInput" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" /></label></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><h2 id="pageTitle">Tổng quan hôm nay</h2><p id="todayText"></p></div>
+        <div class="top-actions"><input id="globalSearch" class="search" placeholder="Tìm tên hoặc số điện thoại..." /><button id="addCustomerBtn" class="primary">+ Thêm khách</button></div>
+      </header>
+
+      <section id="dashboardView" class="view active">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="two-col">
+          <section class="panel"><div class="panel-head"><h3>Việc cần làm tiếp</h3><span class="badge" id="todoCount"></span></div><div id="todoList" class="list"></div></section>
+          <section class="panel"><div class="panel-head"><h3>Tin nhắn đến lịch</h3><span class="badge" id="dueMessageCount"></span></div><div id="dueMessageList" class="list"></div></section>
+        </div>
+        <section class="panel dashboard-hot"><div class="panel-head"><h3>Khách tiềm năng</h3><span class="badge hot">HOT</span></div><div id="hotList" class="list"></div></section>
+      </section>
+
+      <section id="customersView" class="view">
+        <div class="panel filters"><select id="statusFilter"><option value="">Tất cả trạng thái</option><option>Chưa gọi</option><option>Không nghe</option><option>Máy bận</option><option>Đang tư vấn</option><option>Đã gửi Zalo</option><option>Đã gửi SMS</option><option>Hẹn gọi lại</option><option>Tiềm năng</option><option>Không nhu cầu</option><option>Hoàn tất</option></select><select id="sourceFilter"><option value="">Tất cả nguồn</option></select><button id="nextCustomerBtn" class="secondary">▶ Khách tiếp theo</button></div>
+        <div class="customer-layout"><section class="panel customer-list-panel"><div id="customerList" class="customer-list"></div></section><section class="panel detail-panel" id="detailPanel"></section></div>
+      </section>
+
+      <section id="followupsView" class="view"><section class="panel"><div class="panel-head"><h3>Lịch gọi lại</h3></div><div id="followupList" class="list"></div></section></section>
+
+      <section id="automationView" class="view">
+        <div class="automation-toolbar panel"><div><h3>Lịch gửi tin</h3><p class="muted">Nếu backend V3 đang chạy, lịch có thể được đồng bộ lên server để xử lý kể cả khi đóng trình duyệt.</p></div><button id="addScheduleBtn" class="primary">+ Lên lịch gửi</button></div>
+        <div class="panel"><div class="schedule-filters"><select id="scheduleStatusFilter"><option value="">Tất cả lịch</option><option value="scheduled">Đã lên lịch</option><option value="manual">Cần gửi thủ công</option><option value="sent">Đã gửi</option><option value="failed">Lỗi</option><option value="cancelled">Đã hủy</option></select><button id="syncSchedulesBtn" class="secondary small">↻ Đồng bộ server</button></div><div id="scheduleList" class="schedule-list"></div></div>
+      </section>
+
+      <section id="templatesView" class="view">
+        <div class="two-col"><section class="panel"><div class="panel-head"><h3>Mẫu tin nhắn</h3><button id="addTemplateBtn" class="secondary small">+ Thêm</button></div><div id="templateList" class="template-list"></div></section><section class="panel"><h3>Biến dùng trong tin</h3><div class="chips"><span>{ten}</span><span>{sdt}</span><span>{san_pham}</span><span>{nhan_vien}</span></div><p class="muted">Gửi Zalo tự động sử dụng ZBS Template Message đã được Zalo duyệt. Tin nhắn tự do vẫn có thể copy rồi mở Zalo để gửi thủ công.</p></section></div>
+      </section>
+
+      <section id="settingsView" class="view">
+        <div class="settings-stack">
+          <section class="panel"><h3>🎨 Giao diện</h3><p class="muted">Tùy chỉnh màu sắc và mật độ hiển thị.</p>
+            <div class="setting-selects">
+              <label class="field"><span>Chế độ màu</span><select id="colorModeSelect"><option value="system">Theo hệ thống</option><option value="light">Sáng</option><option value="dark">Tối</option></select></label>
+              <label class="field"><span>Giao diện</span><select id="themeStyleSelect"><option value="soft-pink">Hồng nhẹ</option><option value="pink">Hồng tiêu chuẩn</option><option value="minimal">Tối giản</option></select></label>
+              <label class="field"><span>Mật độ hiển thị</span><select id="densitySelect"><option value="comfortable">Thoải mái</option><option value="compact">Gọn</option><option value="dense">Rất gọn</option></select></label>
+            </div>
+          </section>
+
+          <section class="panel"><h3>👁 Hiển thị chức năng</h3><p class="muted">Bật/tắt các chức năng bạn muốn sử dụng.</p><div id="featureToggleList" class="settings-list"></div></section>
+
+          <section class="panel"><h3>📋 Hồ sơ khách hàng</h3><p class="muted">Chọn thông tin sẽ hiển thị trong hồ sơ khách.</p><div id="profileFieldList" class="settings-list"></div>
+            <div class="settings-subhead"><div><strong>✚ Trường tùy chỉnh</strong><p class="muted">Tự tạo thêm thông tin khách.</p></div><button id="addCustomFieldBtn" class="secondary small" type="button">+ Thêm</button></div>
+            <div id="customFieldList" class="settings-list"></div>
+          </section>
+
+          <section class="panel"><h3>📄 Checklist hồ sơ</h3><p class="muted">Chọn các giấy tờ cần theo dõi cho từng khách.</p><div id="documentTypeList" class="settings-list"></div><button id="addDocumentTypeBtn" class="secondary full" type="button">+ Thêm loại giấy tờ</button></section>
+
+          <section class="panel"><h3>⚙️ Xử lý & gửi tin</h3>
+            <label class="toggle-row"><div><strong>Tự động xử lý lịch gửi</strong><p>Khi có backend, lịch sẽ được đẩy lên server.</p></div><input id="autoSendToggle" type="checkbox" /></label>
+            <label class="toggle-row"><div><strong>Tự chuyển sang SMS</strong><p>Dùng SMS khi Zalo không phù hợp hoặc không có Zalo.</p></div><input id="smsFallbackToggle" type="checkbox" /></label>
+          </section>
+
+          <section class="panel"><div class="panel-head"><h3>🔌 Kết nối API</h3><span id="apiOverallBadge" class="mini-pill warn">Chưa kiểm tra</span></div>
+            <label class="field"><span>Địa chỉ Backend V3</span><input id="backendBaseUrl" placeholder="https://api..." /></label><label class="field"><span>APP_API_KEY</span><input id="backendApiKey" type="password" /></label>
+            <div class="api-status-grid"><div><span>Zalo ZBS</span><strong id="zaloApiStatus">—</strong></div><div><span>Tra Zalo</span><strong id="lookupApiStatus">—</strong></div><div><span>SMS</span><strong id="smsApiStatus">—</strong></div></div>
+            <div class="row-actions"><button id="testApiBtn" class="secondary">Kiểm tra</button><button id="saveSettingsBtn" class="primary">Lưu cài đặt</button></div>
+          </section>
+
+          <section class="panel aipp-dashboard-settings">
+  <h3>📊 Tùy chỉnh Tổng quan</h3>
+  <p class="muted">Bật/tắt các mục hiển thị trên màn hình Tổng quan.</p>
+  <div id="aippDashboardToggleList" class="settings-list"></div>
+</section>
+<section class="panel settings-info"><h3>💗 Phuc.Pink</h3><div class="app-info-grid"><span>Ứng dụng</span><strong>Phuc.Pink</strong><span>Phiên bản</span><strong>V5</strong><span>Tác giả</span><strong>Phúc</strong></div><p class="muted">Phát triển bởi Phúc</p></section>
+        </div>
+        <input id="showSourceInfoToggle" type="checkbox" hidden />
+      </section>
+    </main>
+  </div>
+
+  <dialog id="customerDialog"><form id="customerForm" class="dialog-form" novalidate><div class="dialog-head"><h3 id="dialogTitle">Thêm khách hàng</h3><button type="button" class="icon-btn" data-close-dialog="customerDialog">✕</button></div><input type="hidden" id="customerId" /><div class="form-grid"><label class="field"><span>Họ tên *</span><input id="nameInput" /></label><label class="field"><span>Số điện thoại *</span><input id="phoneInput" inputmode="tel" autocomplete="tel" /></label><label class="field source-field"><span>Nguồn khách</span><input id="sourceInput" placeholder="CRM, Facebook, data riêng..." /></label><label class="field"><span>Sản phẩm/Nhu cầu</span><input id="productInput" /></label><label class="field"><span>Trạng thái</span><select id="statusInput"><option>Chưa gọi</option><option>Không nghe</option><option>Máy bận</option><option>Đang tư vấn</option><option>Đã gửi Zalo</option><option>Đã gửi SMS</option><option>Hẹn gọi lại</option><option>Tiềm năng</option><option>Không nhu cầu</option><option>Hoàn tất</option></select></label><label class="field"><span>Hẹn gọi lại</span><input id="followupInput" type="datetime-local" /></label><label class="field"><span>Trạng thái Zalo</span><select id="zaloStatusInput"><option value="unknown">Chưa xác minh</option><option value="yes">Có Zalo</option><option value="no">Không có Zalo</option></select></label><div id="dynamicCustomerFields" class="dynamic-customer-fields full-span"></div><label class="field full-span"><span>Ghi chú</span><textarea id="noteInput" rows="4"></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="customerDialog">Hủy</button><button type="submit" class="primary">Lưu khách hàng</button></div></form></dialog>
+
+  <dialog id="templateDialog"><form id="templateForm" class="dialog-form" novalidate><div class="dialog-head"><h3>Mẫu tin</h3><button type="button" class="icon-btn" data-close-dialog="templateDialog">✕</button></div><input type="hidden" id="templateId" /><div class="form-grid"><label class="field full-span"><span>Tên mẫu</span><input id="templateNameInput" /></label><label class="field full-span"><span>Nội dung thủ công / SMS</span><textarea id="templateTextInput" rows="6"></textarea></label><label class="field"><span>ZBS Template ID</span><input id="zbsTemplateIdInput" placeholder="ID mẫu đã duyệt trên Zalo" /></label><label class="field"><span>ZBS template_data (JSON)</span><textarea id="zbsTemplateDataInput" rows="5" placeholder='{"customer_name":"{ten}"}'></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="templateDialog">Hủy</button><button type="submit" class="primary">Lưu mẫu</button></div></form></dialog>
+
+  <dialog id="scheduleDialog"><form id="scheduleForm" class="dialog-form" novalidate><div class="dialog-head"><h3>Lên lịch gửi tin</h3><button type="button" class="icon-btn" data-close-dialog="scheduleDialog">✕</button></div><input type="hidden" id="scheduleId" /><div class="form-grid"><label class="field full-span"><span>Khách hàng *</span><select id="scheduleCustomerInput"></select></label><label class="field"><span>Kênh gửi</span><select id="scheduleChannelInput"><option value="auto">Tự chọn Zalo → SMS</option><option value="zalo">Zalo ZBS</option><option value="sms">SMS</option></select></label><label class="field"><span>Thời gian gửi *</span><input id="scheduleTimeInput" type="datetime-local" /></label><label class="field full-span"><span>Mẫu tin *</span><select id="scheduleTemplateInput"></select></label><label class="field full-span"><span>Xem trước</span><textarea id="schedulePreview" rows="5" readonly></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="scheduleDialog">Hủy</button><button type="submit" class="primary">Lưu lịch gửi</button></div></form></dialog>
+
+  <div id="toast" class="toast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js?v=20260925-11"></script>
+  <script>
+// AIPP V11: remove old service-worker caches so iPhone always receives the current import code.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs){ regs.forEach(function(r){ r.unregister(); }); });
+}
+if ('caches' in window) { caches.keys().then(function(keys){ keys.forEach(function(k){ caches.delete(k); }); }); }
+</script>
+
+</body>
+</html>
