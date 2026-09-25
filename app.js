@@ -741,3 +741,99 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
   update();
 })();
+
+
+/* =========================================================
+   AIPP V12.1 - CUSTOMER CARD QUICK ACTIONS / MOBILE LAYOUT
+   - Move Nhắc/Gửi sau + Xóa to customer card
+   - Keep Sửa in detail
+   - Prevent mobile detail text from collapsing vertically
+   ========================================================= */
+(()=>{
+  const prevRenderCustomersAippCard=renderCustomers;
+  renderCustomers=function(){
+    prevRenderCustomersAippCard();
+    $$('#customerList .customer-row').forEach(row=>{
+      const id=row.dataset.customerId;
+      const c=state.customers.find(x=>x.id===id);
+      if(!c || row.querySelector('.aipp-card-actions'))return;
+
+      // Preserve the original customer information block and status, then add compact actions.
+      const actions=document.createElement('div');
+      actions.className='aipp-card-actions';
+      actions.innerHTML=`
+        <button type="button" class="secondary small aipp-card-schedule" data-card-schedule="${esc(id)}" title="Nhắc hoặc gửi sau">🗓 <span>Nhắc/Gửi sau</span></button>
+        <button type="button" class="danger small aipp-card-delete" data-delete="${esc(id)}" title="Xóa khách">🗑 <span>Xóa</span></button>
+        <button type="button" class="secondary small aipp-card-detail" data-card-detail="${esc(id)}" title="Xem chi tiết">Chi tiết</button>`;
+      row.appendChild(actions);
+    });
+  };
+
+  const prevRenderDetailAippCard=renderDetail;
+  renderDetail=function(){
+    prevRenderDetailAippCard();
+    const panel=$('#detailPanel');
+    if(!panel)return;
+    // Requested: these two actions live on the customer card, not in detail.
+    panel.querySelector('.customer-head-actions [data-schedule-customer]')?.remove();
+    panel.querySelector('.customer-head-actions [data-delete]')?.remove();
+  };
+
+  // Capture quick actions before the customer-row click handler can open/return first.
+  document.addEventListener('click',e=>{
+    const schedule=e.target.closest('[data-card-schedule]');
+    if(schedule){
+      e.preventDefault(); e.stopImmediatePropagation();
+      selectedCustomerId=schedule.dataset.cardSchedule;
+      renderCustomers(); renderDetail();
+      openScheduleDialog(selectedCustomerId);
+      return;
+    }
+    const detail=e.target.closest('[data-card-detail]');
+    if(detail){
+      e.preventDefault(); e.stopImmediatePropagation();
+      selectedCustomerId=detail.dataset.cardDetail;
+      renderCustomers(); renderDetail();
+      if(window.innerWidth<=920)setTimeout(()=>$('#detailPanel')?.scrollIntoView({behavior:'smooth',block:'start'}),60);
+      return;
+    }
+  },true);
+
+  if(!document.querySelector('#aippCustomerCardActionStyle')){
+    const style=document.createElement('style');
+    style.id='aippCustomerCardActionStyle';
+    style.textContent=`
+      #customerList .customer-row{position:relative;gap:10px;align-items:center;min-width:0}
+      #customerList .customer-row>div:first-child{min-width:0;flex:1 1 auto}
+      #customerList .customer-row>div:first-child strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      #customerList .customer-row>.status-pill{flex:0 0 auto}
+      .aipp-card-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex:0 0 auto}
+      .aipp-card-actions button{margin:0;white-space:nowrap;min-width:0}
+      .aipp-card-detail{font-weight:800}
+      #detailPanel .customer-summary{display:flex;align-items:flex-start;gap:10px;min-width:0}
+      #detailPanel .customer-summary-main{min-width:0;flex:1 1 auto;width:auto!important}
+      #detailPanel .customer-summary-main h3,#detailPanel .customer-summary-main .phone{word-break:normal!important;overflow-wrap:normal!important;white-space:normal}
+      #detailPanel .customer-head-actions{flex:0 0 auto;width:auto!important;min-width:max-content}
+      @media(max-width:920px){
+        #customerList .customer-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:'info detail' 'actions actions';padding:12px!important}
+        #customerList .customer-row>div:first-child{grid-area:info}
+        #customerList .customer-row>.status-pill{display:none!important}
+        .aipp-card-actions{grid-area:actions;width:100%;display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,.72fr) minmax(0,.8fr);gap:6px;margin-top:8px}
+        .aipp-card-actions button{width:100%;padding:9px 7px!important;font-size:13px!important;border-radius:12px!important}
+        .aipp-card-actions button span{display:inline}
+        #detailPanel .customer-summary{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;width:100%!important}
+        #detailPanel .customer-summary-main{width:100%!important;max-width:none!important}
+        #detailPanel .customer-head-actions{width:auto!important;display:flex!important;align-items:flex-start!important}
+        #detailPanel .customer-head-actions button{width:auto!important;min-width:76px!important}
+      }
+      @media(max-width:390px){
+        .aipp-card-actions{grid-template-columns:minmax(0,1.25fr) minmax(0,.62fr) minmax(0,.72fr)}
+        .aipp-card-actions button{font-size:12px!important;padding:8px 5px!important}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  renderCustomers();
+  renderDetail();
+})();
