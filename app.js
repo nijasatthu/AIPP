@@ -173,7 +173,7 @@ document.addEventListener('click',async e=>{
 });
 
 $('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`telesale-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href)});
-$('#importInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=migrateState(JSON.parse(r.result));state=j;selectedCustomerId=state.customers[0]?.id||null;save();toast('Đã nhập dữ liệu')}catch{alert('File dữ liệu không hợp lệ.')}};r.readAsText(f)});
+// Import khách được xử lý duy nhất bởi AIPP Excel V4 ở phần dưới. Backup JSON dùng mục Khôi phục riêng.
 
 const previewLikely=location.protocol==='file:'||/Acode|; wv\)/i.test(navigator.userAgent);if(previewLikely)$('#browserNotice').classList.remove('hidden');$('#dismissBrowserNotice').addEventListener('click',()=>$('#browserNotice').classList.add('hidden'));
 if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(()=>{});
@@ -497,9 +497,22 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   function parseCSV(text){const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return [];const sep=(lines[0].match(/;/g)||[]).length>(lines[0].match(/,/g)||[]).length?';':',';return lines.map(line=>{let out=[],cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(ch===sep&&!q){out.push(cur.trim());cur=''}else cur+=ch}out.push(cur.trim());return out})}
   function normHeader(v){return String(v??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ').trim()}
   function findCol(headers,names){const hs=headers.map(normHeader),ns=names.map(normHeader);let i=hs.findIndex(h=>ns.includes(h));if(i>=0)return i;return hs.findIndex(h=>ns.some(n=>h.includes(n)||n.includes(h)))}
+  function importPhone(v){
+    let p=normalizePhone(v);
+    // Excel thường làm mất số 0 đầu nếu cột SĐT được lưu dạng Number.
+    if(/^\d{9}$/.test(p))p='0'+p;
+    return p;
+  }
   function rowsToImport(rows,fileName=''){
     if(!rows||rows.length<2){toast('File không có dữ liệu');return}
-    const h=rows[0];
+    // Tự tìm dòng tiêu đề trong 30 dòng đầu, ưu tiên dòng có cột số điện thoại.
+    let headerIndex=-1;
+    for(let i=0;i<Math.min(rows.length,30);i++){
+      const rr=Array.isArray(rows[i])?rows[i]:[];
+      if(findCol(rr,['sđt','sdt','số điện thoại','điện thoại','phone','phone number','mobile'])>=0){headerIndex=i;break}
+    }
+    if(headerIndex<0){importLoading(false);toast('Không tìm thấy cột Số điện thoại trong 30 dòng đầu',5500);return}
+    const h=rows[headerIndex];
     const ni=findCol(h,['họ tên','họ và tên','tên khách hàng','khách hàng','tên','name','customer name']);
     const pi=findCol(h,['sđt','sdt','số điện thoại','điện thoại','phone','phone number','mobile']);
     const si=findCol(h,['nguồn','nguồn khách','source']);
@@ -508,7 +521,7 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
     const fi=findCol(h,['ngày hẹn','hẹn gọi lại','gọi lại','followup','follow up']);
     const noi=findCol(h,['ghi chú','note','notes']);
     if(pi<0)return toast('Không nhận diện được cột Số điện thoại');
-    const items=rows.slice(1).map((r,n)=>({row:n+2,name:ni>=0?String(r[ni]??'').trim():'Khách hàng',phone:normalizePhone(r[pi]??''),source:si>=0?String(r[si]??'').trim():'',product:pri>=0?String(r[pri]??'').trim():'',status:sti>=0?String(r[sti]??'').trim()||'Chưa gọi':'Chưa gọi',followup:fi>=0?String(r[fi]??'').trim():'',note:noi>=0?String(r[noi]??'').trim():''})).filter(x=>x.name||x.phone);
+    const items=rows.slice(headerIndex+1).map((r,n)=>({row:headerIndex+n+2,name:ni>=0?String(r[ni]??'').trim():'Khách hàng',phone:importPhone(r[pi]??''),source:si>=0?String(r[si]??'').trim():'',product:pri>=0?String(r[pri]??'').trim():'',status:sti>=0?String(r[sti]??'').trim()||'Chưa gọi':'Chưa gọi',followup:fi>=0?String(r[fi]??'').trim():'',note:noi>=0?String(r[noi]??'').trim():''})).filter(x=>x.name||x.phone);
     let valid=0,dup=0,bad=0;const seen=new Set(state.customers.map(c=>normalizePhone(c.phone)));
     items.forEach(x=>{if(!classifyPhone(x.phone).valid)bad++;else if(seen.has(x.phone))dup++;else{valid++;seen.add(x.phone)}});
     let dlg=$('#ppImportDialog');if(!dlg){dlg=document.createElement('dialog');dlg.id='ppImportDialog';document.body.appendChild(dlg)}
@@ -532,7 +545,27 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
     }
     importLoading(false);toast('Chỉ hỗ trợ Excel .xlsx/.xls hoặc CSV');
   }
-  const importEl=$('#importInput');if(importEl){importEl.accept='.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv';importEl.addEventListener('change',e=>{const f=e.target.files[0];if(f&&/\.(xlsx|xls|csv)$/i.test(f.name)){e.stopImmediatePropagation();importPreview(f);e.target.value=''}},true)}
+  const importEl=$('#importInput');
+  if(importEl){
+    importEl.accept='.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv';
+    let lastImportToken='';
+    const handleImportFile=e=>{
+      const f=e.target.files&&e.target.files[0];
+      if(!f)return;
+      const token=`${f.name}|${f.size}|${f.lastModified}`;
+      if(token===lastImportToken)return;
+      lastImportToken=token;
+      // Hiện loading ngay khi Safari trả file về cho trang.
+      importLoading(true,`Đã chọn ${f.name} · đang chuẩn bị đọc...`);
+      requestAnimationFrame(()=>setTimeout(()=>{
+        try{importPreview(f)}catch(err){importLoading(false);toast('Lỗi mở file: '+err.message,6000)}
+        e.target.value='';
+        setTimeout(()=>{lastImportToken=''},400);
+      },80));
+    };
+    importEl.onchange=handleImportFile;
+    importEl.oninput=handleImportFile;
+  }
   // Refresh injected pieces after normal render.
   const oldAll=renderAll;renderAll=function(){ensureCRMData();oldAll();ensureAdvancedFilters();ensureReport();renderReport();ensureBackup();};renderAll();
 })();
