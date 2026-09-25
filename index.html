@@ -119,6 +119,7 @@
   <dialog id="scheduleDialog"><form id="scheduleForm" class="dialog-form" novalidate><div class="dialog-head"><h3>Lên lịch gửi tin</h3><button type="button" class="icon-btn" data-close-dialog="scheduleDialog">✕</button></div><input type="hidden" id="scheduleId" /><div class="form-grid"><label class="field full-span"><span>Khách hàng *</span><select id="scheduleCustomerInput"></select></label><label class="field"><span>Kênh gửi</span><select id="scheduleChannelInput"><option value="auto">Tự chọn Zalo → SMS</option><option value="zalo">Zalo ZBS</option><option value="sms">SMS</option></select></label><label class="field"><span>Thời gian gửi *</span><input id="scheduleTimeInput" type="datetime-local" /></label><label class="field full-span"><span>Mẫu tin *</span><select id="scheduleTemplateInput"></select></label><label class="field full-span"><span>Xem trước</span><textarea id="schedulePreview" rows="5" readonly></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="scheduleDialog">Hủy</button><button type="submit" class="primary">Lưu lịch gửi</button></div></form></dialog>
 
   <div id="toast" class="toast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="app.js"></script>
   <script>
 if ('serviceWorker' in navigator) {

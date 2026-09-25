@@ -493,10 +493,40 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   // Backup / restore entry in Settings.
   function ensureBackup(){const v=$('#settingsView');if(!v||$('#ppBackupCard'))return;v.insertAdjacentHTML('beforeend',`<section class="panel pp-backup" id="ppBackupCard"><h3>💾 Sao lưu & khôi phục</h3><p class="muted">Backup toàn bộ khách, timeline, lịch gửi, mẫu tin và cài đặt.</p><div class="row-actions"><button class="secondary" id="ppBackupNow">Tạo backup</button><button class="secondary" id="ppRestoreBackup">Khôi phục file</button></div><input type="file" id="ppRestoreInput" accept="application/json" hidden></section>`);$('#ppBackupNow').onclick=()=>$('#exportBtn').click();$('#ppRestoreBackup').onclick=()=>$('#ppRestoreInput').click();$('#ppRestoreInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=migrateState(JSON.parse(r.result));if(!j.customers)throw 0;state=j;ensureCRMData();selectedCustomerId=state.customers[0]?.id||null;save();toast('Đã khôi phục backup thành công')}catch{toast('Backup không hợp lệ')}};r.readAsText(f)};}
   ensureBackup();
-  // CSV Import V2 preview. Keep JSON backup restore separate.
+  // Excel / CSV Import V2 preview. JSON backup restore remains separate.
   function parseCSV(text){const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return [];const sep=(lines[0].match(/;/g)||[]).length>(lines[0].match(/,/g)||[]).length?';':',';return lines.map(line=>{let out=[],cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(ch===sep&&!q){out.push(cur.trim());cur=''}else cur+=ch}out.push(cur.trim());return out})}
-  function importPreview(file){const r=new FileReader();r.onload=()=>{const rows=parseCSV(r.result);if(rows.length<2)return toast('CSV không có dữ liệu');const h=rows[0].map(x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''));const idx=(...names)=>h.findIndex(x=>names.some(n=>x.includes(n)));const ni=idx('ho ten','ten','name'),pi=idx('sdt','so dien thoai','phone'),si=idx('nguon','source'),pri=idx('san pham','nhu cau','product'),sti=idx('trang thai','status'),fi=idx('ngay hen','hen','followup'),noi=idx('ghi chu','note');if(ni<0||pi<0)return toast('Không nhận diện được cột Tên và SĐT');const items=rows.slice(1).map((r,n)=>({row:n+2,name:r[ni]||'',phone:normalizePhone(r[pi]||''),source:r[si]||'',product:r[pri]||'',status:r[sti]||'Chưa gọi',followup:r[fi]||'',note:r[noi]||''}));let valid=0,dup=0,bad=0;items.forEach(x=>{if(!x.name||!classifyPhone(x.phone).valid)bad++;else if(state.customers.some(c=>normalizePhone(c.phone)===x.phone))dup++;else valid++});let dlg=$('#ppImportDialog');if(!dlg){dlg=document.createElement('dialog');dlg.id='ppImportDialog';document.body.appendChild(dlg)}dlg.innerHTML=`<div class="dialog-form"><div class="dialog-head"><h3>📥 Xem trước nhập CSV</h3><button class="icon-btn" onclick="this.closest('dialog').close()">✕</button></div><div class="pp-import-summary"><div><strong>${items.length}</strong><span>Tổng dòng</span></div><div><strong>${valid}</strong><span>Hợp lệ</span></div><div><strong>${dup}</strong><span>Trùng</span></div><div><strong>${bad}</strong><span>Lỗi</span></div></div><p class="muted">Nhận diện: Tên = cột ${ni+1} · SĐT = cột ${pi+1}. Số trùng sẽ được bỏ qua.</p><div class="dialog-actions"><button class="secondary" onclick="this.closest('dialog').close()">Hủy</button><button class="primary" id="ppConfirmCSV">Nhập ${valid} khách</button></div></div>`;dlg.showModal();$('#ppConfirmCSV').onclick=()=>{let added=0;items.forEach(x=>{if(!x.name||!classifyPhone(x.phone).valid||state.customers.some(c=>normalizePhone(c.phone)===x.phone))return;state.customers.unshift({id:crypto.randomUUID(),name:x.name,phone:x.phone,source:x.source,product:x.product,status:x.status||'Chưa gọi',followup:x.followup,note:x.note,zaloStatus:'unknown',level:'Quan tâm',timeline:[{id:crypto.randomUUID(),at:new Date().toISOString(),type:'note',title:'Nhập từ CSV',detail:`Dòng ${x.row}`}],profile:{},customFields:{},documents:{},updatedAt:new Date().toISOString()});added++});save();dlg.close();toast(`Đã nhập ${added} khách · Bỏ qua ${dup} số trùng · ${bad} dòng lỗi`,5000)};};r.readAsText(file)}
-  const importEl=$('#importInput');if(importEl){importEl.accept='.json,.csv,text/csv,application/json';importEl.addEventListener('change',e=>{const f=e.target.files[0];if(f&&/\.csv$/i.test(f.name)){e.stopImmediatePropagation();importPreview(f);e.target.value=''}},true)}
+  function normHeader(v){return String(v??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ').trim()}
+  function findCol(headers,names){const hs=headers.map(normHeader),ns=names.map(normHeader);let i=hs.findIndex(h=>ns.includes(h));if(i>=0)return i;return hs.findIndex(h=>ns.some(n=>h.includes(n)||n.includes(h)))}
+  function rowsToImport(rows,fileName=''){
+    if(!rows||rows.length<2){toast('File không có dữ liệu');return}
+    const h=rows[0];
+    const ni=findCol(h,['họ tên','họ và tên','tên khách hàng','khách hàng','tên','name','customer name']);
+    const pi=findCol(h,['sđt','sdt','số điện thoại','điện thoại','phone','phone number','mobile']);
+    const si=findCol(h,['nguồn','nguồn khách','source']);
+    const pri=findCol(h,['sản phẩm','nhu cầu','sản phẩm nhu cầu','product','need']);
+    const sti=findCol(h,['trạng thái','status']);
+    const fi=findCol(h,['ngày hẹn','hẹn gọi lại','gọi lại','followup','follow up']);
+    const noi=findCol(h,['ghi chú','note','notes']);
+    if(pi<0)return toast('Không nhận diện được cột Số điện thoại');
+    const items=rows.slice(1).map((r,n)=>({row:n+2,name:ni>=0?String(r[ni]??'').trim():'Khách hàng',phone:normalizePhone(r[pi]??''),source:si>=0?String(r[si]??'').trim():'',product:pri>=0?String(r[pri]??'').trim():'',status:sti>=0?String(r[sti]??'').trim()||'Chưa gọi':'Chưa gọi',followup:fi>=0?String(r[fi]??'').trim():'',note:noi>=0?String(r[noi]??'').trim():''})).filter(x=>x.name||x.phone);
+    let valid=0,dup=0,bad=0;const seen=new Set(state.customers.map(c=>normalizePhone(c.phone)));
+    items.forEach(x=>{if(!classifyPhone(x.phone).valid)bad++;else if(seen.has(x.phone))dup++;else{valid++;seen.add(x.phone)}});
+    let dlg=$('#ppImportDialog');if(!dlg){dlg=document.createElement('dialog');dlg.id='ppImportDialog';document.body.appendChild(dlg)}
+    const colName=i=>i>=0?`${i+1} (${esc(h[i])})`:'không có';
+    dlg.innerHTML=`<div class="dialog-form"><div class="dialog-head"><h3>📥 Xem trước nhập Excel/CSV</h3><button class="icon-btn" onclick="this.closest('dialog').close()">✕</button></div><div class="pp-import-summary"><div><strong>${items.length}</strong><span>Tổng dòng</span></div><div><strong>${valid}</strong><span>Hợp lệ</span></div><div><strong>${dup}</strong><span>Trùng</span></div><div><strong>${bad}</strong><span>Lỗi</span></div></div><p class="muted">${esc(fileName)}<br>Đã tự nhận diện theo tên cột, không cần đúng thứ tự.<br>Tên: ${colName(ni)} · SĐT: ${colName(pi)} · Nguồn: ${colName(si)} · Nhu cầu: ${colName(pri)}</p><div class="dialog-actions"><button class="secondary" onclick="this.closest('dialog').close()">Hủy</button><button class="primary" id="ppConfirmCSV">Nhập ${valid} khách</button></div></div>`;
+    dlg.showModal();
+    $('#ppConfirmCSV').onclick=()=>{let added=0,dupNow=0,badNow=0;const current=new Set(state.customers.map(c=>normalizePhone(c.phone)));items.forEach(x=>{if(!classifyPhone(x.phone).valid){badNow++;return}if(current.has(x.phone)){dupNow++;return}current.add(x.phone);state.customers.unshift({id:crypto.randomUUID(),name:x.name||'Khách hàng',phone:x.phone,source:x.source,product:x.product,status:x.status||'Chưa gọi',followup:x.followup,note:x.note,zaloStatus:'unknown',level:'Quan tâm',timeline:[{id:crypto.randomUUID(),at:new Date().toISOString(),type:'note',title:'Nhập từ Excel/CSV',detail:`Dòng ${x.row}`}],profile:{},customFields:{},documents:{},updatedAt:new Date().toISOString()});added++});save();dlg.close();toast(`Đã nhập ${added} khách · Bỏ qua ${dupNow} số trùng · ${badNow} dòng lỗi`,5000)};
+  }
+  function importPreview(file){
+    const ext=(file.name.split('.').pop()||'').toLowerCase();
+    if(ext==='csv'){const r=new FileReader();r.onload=()=>rowsToImport(parseCSV(r.result),file.name);r.readAsText(file);return}
+    if(ext==='xlsx'||ext==='xls'){
+      if(typeof XLSX==='undefined'){toast('Chưa tải được bộ đọc Excel. Kiểm tra Internet rồi thử lại.',4500);return}
+      const r=new FileReader();r.onload=()=>{try{const wb=XLSX.read(r.result,{type:'array',cellDates:false,raw:false});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});rowsToImport(rows,file.name)}catch(err){toast('Không đọc được file Excel: '+err.message,5000)}};r.readAsArrayBuffer(file);return
+    }
+    toast('Chỉ hỗ trợ Excel .xlsx/.xls hoặc CSV');
+  }
+  const importEl=$('#importInput');if(importEl){importEl.accept='.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv';importEl.addEventListener('change',e=>{const f=e.target.files[0];if(f&&/\.(xlsx|xls|csv)$/i.test(f.name)){e.stopImmediatePropagation();importPreview(f);e.target.value=''}},true)}
   // Refresh injected pieces after normal render.
   const oldAll=renderAll;renderAll=function(){ensureCRMData();oldAll();ensureAdvancedFilters();ensureReport();renderReport();ensureBackup();};renderAll();
 })();
@@ -676,7 +706,7 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   // Working Import button: always opens the real file picker.
   document.addEventListener('click',e=>{
     const b=e.target.closest('#ppImportBtn,[data-import-customers]'); if(!b)return;
-    e.preventDefault(); document.querySelector('#importFile')?.click();
+    e.preventDefault(); document.querySelector('#importInput')?.click();
   },true);
 
   // Paste opens guidance first, then user pastes text.
