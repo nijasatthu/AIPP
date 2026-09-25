@@ -121,8 +121,18 @@
   <button id="aippBackToTop" class="aipp-back-to-top" type="button" aria-label="Lên đầu trang" title="Lên đầu trang">↑</button>
   <div id="toast" class="toast"></div>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260925-13"></script>
+  <script src="app.js?v=20260925-14"></script>
   <!-- AIPP V13: compact customer layout + global back-to-top button. -->
+
+  <div id="aippNetworkStatus" class="aipp-network-status" role="status">Đang kiểm tra mạng…</div>
+  <script>
+  (()=>{
+    const el=document.getElementById('aippNetworkStatus');
+    const paint=()=>{const on=navigator.onLine;el.textContent=on?'● Online':'● Offline';el.classList.toggle('offline',!on);el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)};
+    addEventListener('online',paint); addEventListener('offline',paint); paint();
+    if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=14',{scope:'./'}).catch(err=>console.error('AIPP SW:',err)));}
+  })();
+  </script>
 
 </body>
 </html>
