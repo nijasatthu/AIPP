@@ -121,18 +121,18 @@
   <dialog id="aippImportDialog">
     <div class="dialog-form">
       <div class="dialog-head"><h3>📥 Nhập khách từ Excel/CSV</h3><button type="button" class="icon-btn" id="closeImportDialogBtn">✕</button></div>
-      <p class="muted">Chọn file trước. AIPP sẽ hiện tên file, sau đó bạn bấm <b>Đọc dữ liệu</b>.</p>
+      <p class="muted">Chọn file Excel/CSV. AIPP sẽ <b>tự đọc ngay</b> và hiển thị từng bước để biết chính xác đang xử lý đến đâu.</p>
       <input id="importInput" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
-      <button id="chooseImportFileBtn" type="button" class="secondary full">📁 Chọn file Excel/CSV</button>
+      <button id="chooseImportFileBtn" type="button" class="secondary full">📁 Chọn file Excel/CSV và đọc ngay</button>
       <div id="importSelectedInfo" class="note-box" style="margin-top:12px">Chưa chọn file.</div>
       <div id="importProgressBox" class="note-box" style="margin-top:12px;display:none"><strong id="importProgressText">Đang xử lý...</strong><div style="height:8px;background:#e5e7eb;border-radius:99px;margin-top:10px;overflow:hidden"><div id="importProgressBar" style="height:100%;width:15%;background:#2563eb;border-radius:99px;transition:width .25s ease"></div></div></div>
-      <div class="dialog-actions"><button type="button" class="secondary" id="cancelImportDialogBtn">Hủy</button><button type="button" class="primary" id="readImportFileBtn" disabled>Đọc dữ liệu</button></div>
+      <div class="dialog-actions"><button type="button" class="secondary" id="cancelImportDialogBtn">Hủy</button><button type="button" class="primary" id="readImportFileBtn" disabled>Đọc lại file</button></div>
     </div>
   </dialog>
 
   <div id="toast" class="toast"></div>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260925-5"></script>
+  <script src="app.js?v=20260925-6"></script>
   <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {

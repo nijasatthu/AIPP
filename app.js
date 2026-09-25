@@ -524,7 +524,24 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   }
   function readAippImportFile(){const file=aippSelectedImportFile;if(!file)return toast('Bạn chưa chọn file');const ext=(file.name.split('.').pop()||'').toLowerCase();setImportProgress(`Đang đọc ${file.name}...`,25,true);const reader=new FileReader();reader.onerror=()=>{setImportProgress('Không đọc được file',100,true);toast('Không đọc được file. Nếu file ở iCloud, hãy tải file về máy rồi thử lại.',6000)};if(ext==='csv'){reader.onload=()=>{try{setImportProgress('Đang phân tích các cột...',65,true);rowsToImport(parseCSV(reader.result),file.name)}catch(err){setImportProgress('Có lỗi khi đọc CSV',100,true);toast('Lỗi CSV: '+err.message,6000)}};reader.readAsText(file);return}if(ext==='xlsx'||ext==='xls'){if(typeof XLSX==='undefined'){setImportProgress('Bộ đọc Excel chưa tải',100,true);toast('Bộ đọc Excel chưa sẵn sàng. Hãy mở AIPP khi có Internet rồi thử lại.',6000);return}reader.onload=()=>{try{setImportProgress('Đang phân tích Excel...',65,true);const wb=XLSX.read(reader.result,{type:'array',cellDates:false});if(!wb.SheetNames.length)throw new Error('Excel không có sheet');const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});rowsToImport(rows,file.name)}catch(err){setImportProgress('Có lỗi khi đọc Excel',100,true);toast('Không đọc được Excel: '+err.message,6500)}};reader.readAsArrayBuffer(file);return}setImportProgress('Định dạng không hỗ trợ',100,true);toast('Chỉ hỗ trợ .xlsx, .xls hoặc .csv')}
   const importEl=$('#importInput');
-  if(importEl){importEl.onchange=()=>{const f=importEl.files?.[0];if(!f)return;aippSelectedImportFile=f;$('#importSelectedInfo').innerHTML=`<strong>Đã chọn:</strong> ${esc(f.name)}<br><span class="muted">${Math.max(1,Math.round(f.size/1024))} KB · Bấm “Đọc dữ liệu” để tiếp tục.</span>`;$('#readImportFileBtn').disabled=false;setImportProgress('File đã được chọn — sẵn sàng đọc',12,true);toast(`Đã chọn ${f.name}`)}}
+  if(importEl){
+    importEl.onchange=()=>{
+      const f=importEl.files?.[0];
+      const info=$('#importSelectedInfo');
+      if(!f){
+        aippSelectedImportFile=null;
+        if(info)info.innerHTML='<strong>Chưa nhận được file.</strong><br><span class="muted">Hãy chọn lại file Excel/CSV.</span>';
+        setImportProgress('iPhone chưa trả file về AIPP',100,true);
+        return;
+      }
+      aippSelectedImportFile=f;
+      if(info)info.innerHTML=`<strong>✓ Đã nhận file:</strong> ${esc(f.name)}<br><span class="muted">${Math.max(1,Math.round(f.size/1024))} KB · AIPP đang tự đọc dữ liệu...</span>`;
+      $('#readImportFileBtn').disabled=false;
+      setImportProgress('✓ Đã nhận file — đang chuẩn bị đọc...',18,true);
+      toast(`✓ Đã nhận ${f.name}`,3500);
+      setTimeout(()=>readAippImportFile(),120);
+    };
+  }
   $('#openImportDialogBtn')?.addEventListener('click',openAippImportDialog);
   $('#chooseImportFileBtn')?.addEventListener('click',()=>{const i=$('#importInput');if(i){i.value='';i.click()}});
   $('#readImportFileBtn')?.addEventListener('click',readAippImportFile);
@@ -708,7 +725,7 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
 
   // Working Import button: always opens the real file picker.
   document.addEventListener('click',e=>{
-    const b=e.target.closest('#ppImportBtn,[data-import-customers]'); if(!b)return;
+    const b=e.target.closest('[data-import-customers]'); if(!b)return;
     e.preventDefault(); openAippImportDialog();
   },true);
 
