@@ -227,3 +227,99 @@ body.pp-dark input[type="datetime-local"]::-webkit-calendar-picker-indicator{fil
 /* Keep buttons/cards light unless they are already intentional dark navigation */
 body.pp-dark .secondary{background:#fff!important;color:#0f172a!important;border-color:#cbd5e1!important}
 body.pp-dark .note-box,body.pp-dark .aipp-customer-tools{background:#f8fafc!important;color:#0f172a!important}
+
+/* ===== AIPP V17: unified accent themes + input-only dark mode ===== */
+body[data-theme="soft-pink"]{--primary:#ec4899;--primary2:#db2777;--aipp-accent:#ec4899;--aipp-accent2:#db2777}
+body[data-theme="pink"]{--primary:#db2777;--primary2:#be185d;--aipp-accent:#db2777;--aipp-accent2:#be185d}
+body[data-theme="blue"]{--primary:#2563eb;--primary2:#1d4ed8;--aipp-accent:#2563eb;--aipp-accent2:#1d4ed8}
+body[data-theme="teal"]{--primary:#0d9488;--primary2:#0f766e;--aipp-accent:#0d9488;--aipp-accent2:#0f766e}
+body[data-theme="green"]{--primary:#16a34a;--primary2:#15803d;--aipp-accent:#16a34a;--aipp-accent2:#15803d}
+body[data-theme="purple"]{--primary:#7c3aed;--primary2:#6d28d9;--aipp-accent:#7c3aed;--aipp-accent2:#6d28d9}
+body[data-theme="orange"]{--primary:#ea580c;--primary2:#c2410c;--aipp-accent:#ea580c;--aipp-accent2:#c2410c}
+body[data-theme="red"]{--primary:#dc2626;--primary2:#b91c1c;--aipp-accent:#dc2626;--aipp-accent2:#b91c1c}
+body[data-theme="minimal"]{--primary:#475569;--primary2:#1e293b;--aipp-accent:#475569;--aipp-accent2:#1e293b}
+
+/* Theme now affects the important app chrome, not only buttons. */
+.topbar{background:linear-gradient(135deg,var(--aipp-accent,var(--primary)),var(--aipp-accent2,var(--primary2)))!important}
+.primary{background:var(--aipp-accent,var(--primary))!important}
+.primary:hover{background:var(--aipp-accent2,var(--primary2))!important}
+.setting-check input[type="checkbox"],.settings-list input[type="checkbox"],.toggle-row input[type="checkbox"],.doc-check input{accent-color:var(--aipp-accent,var(--primary))!important}
+.customer-row.active{border-color:var(--aipp-accent,var(--primary))!important;background:color-mix(in srgb,var(--aipp-accent,var(--primary)) 9%,white)!important}
+.quick-status button.active{border-color:var(--aipp-accent,var(--primary))!important;color:var(--aipp-accent2,var(--primary2))!important;background:color-mix(in srgb,var(--aipp-accent,var(--primary)) 10%,white)!important}
+.aipp-back-to-top{background:var(--aipp-accent,var(--primary))!important}
+@media(max-width:920px){
+  .sidebar{background:linear-gradient(180deg,color-mix(in srgb,var(--aipp-accent2,var(--primary2)) 48%,#0f172a),#0f172a)!important}
+  .nav-btn.active{background:linear-gradient(135deg,var(--aipp-accent,var(--primary)),var(--aipp-accent2,var(--primary2)))!important;color:#fff!important;box-shadow:0 4px 12px color-mix(in srgb,var(--aipp-accent,var(--primary)) 28%,transparent)!important}
+}
+
+/* Dark mode = form controls only. Never darken page/cards/nav/header. */
+body.pp-dark{background:#f5f7fa!important;color:#0f172a!important;--bg:#f5f7fa;--panel:#fff;--text:#0f172a;--muted:#64748b;--line:#dbe3ee}
+body.pp-dark .panel,body.pp-dark .settings-stack .panel,body.pp-dark .customer-list-panel,body.pp-dark .detail-panel,body.pp-dark .stat,body.pp-dark .detail-card,body.pp-dark .list-item,body.pp-dark .customer-row,body.pp-dark .template-row,body.pp-dark .schedule-row{background:#fff!important;color:#0f172a!important}
+body.pp-dark input:not([type="checkbox"]):not([type="radio"]),body.pp-dark select,body.pp-dark textarea,body.pp-dark .search,body.pp-dark .filters select,body.pp-dark .schedule-filters select{background:#111827!important;color:#f8fafc!important;border-color:#334155!important;color-scheme:dark}
+body.pp-dark input::placeholder,body.pp-dark textarea::placeholder,body.pp-dark .search::placeholder{color:#9ca3af!important}
+body.pp-dark select option{background:#111827!important;color:#f8fafc!important}
+body.pp-dark .topbar{color:#fff!important}
+body.pp-dark .topbar p{color:rgba(255,255,255,.82)!important}
+body.pp-dark .secondary{background:#e8edf4!important;color:#0f172a!important;border-color:transparent!important}
+
+/* Privacy state must be unmistakable. */
+#aippPrivacyCard{border:2px solid #dbe3ee;transition:.2s ease}
+#aippPrivacyCard.privacy-on{border-color:#86efac;background:#f0fdf4!important}
+#aippPrivacyCard.privacy-off{border-color:#fecaca;background:#fff7f7!important}
+.aipp-privacy-state{display:flex!important;align-items:center;gap:9px;width:100%!important;border-radius:14px!important;padding:11px 13px!important;font-size:13px!important;font-weight:850!important;white-space:normal!important}
+.aipp-privacy-state.good{background:#dcfce7!important;color:#166534!important;border:1px solid #86efac}
+.aipp-privacy-state.bad{background:#fee2e2!important;color:#991b1b!important;border:1px solid #fecaca}
+
+/* ===== AIPP V18: COLOR MODE = APP BACKGROUND; THEME = ACCENT + CONTROLS ===== */
+/* Light mode: theme tint belongs to form controls. */
+body:not(.pp-dark) input:not([type="checkbox"]):not([type="radio"]),
+body:not(.pp-dark) select,
+body:not(.pp-dark) textarea,
+body:not(.pp-dark) .search,
+body:not(.pp-dark) .filters select,
+body:not(.pp-dark) .schedule-filters select{
+  background:color-mix(in srgb,var(--aipp-accent,var(--primary)) 7%,#fff)!important;
+  color:#0f172a!important;
+  border-color:color-mix(in srgb,var(--aipp-accent,var(--primary)) 24%,#dbe3ee)!important;
+  color-scheme:light;
+}
+body:not(.pp-dark) input:focus,body:not(.pp-dark) select:focus,body:not(.pp-dark) textarea:focus,body:not(.pp-dark) .search:focus{
+  border-color:var(--aipp-accent,var(--primary))!important;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--aipp-accent,var(--primary)) 16%,transparent)!important;
+}
+
+/* Dark mode now controls the whole app background/cards. */
+html:has(body.pp-dark){background:#090f1c!important}
+body.pp-dark{
+  --bg:#090f1c!important;--panel:#121b2b!important;--text:#f8fafc!important;--muted:#9aa9bf!important;--line:#26354a!important;
+  background:var(--bg)!important;color:var(--text)!important;color-scheme:dark;
+}
+body.pp-dark .main,body.pp-dark .app-shell{background:var(--bg)!important;color:var(--text)!important}
+body.pp-dark .panel,body.pp-dark .settings-stack .panel,body.pp-dark .customer-list-panel,body.pp-dark .detail-panel,
+body.pp-dark .stat,body.pp-dark .detail-card,body.pp-dark .list-item,body.pp-dark .customer-row,body.pp-dark .template-row,
+body.pp-dark .schedule-row,body.pp-dark dialog,body.pp-dark .dialog-form{
+  background:var(--panel)!important;color:var(--text)!important;border-color:var(--line)!important;
+}
+body.pp-dark .muted,body.pp-dark .meta,body.pp-dark .field>span,body.pp-dark .topbar p{color:var(--muted)!important}
+body.pp-dark .list-item:hover,body.pp-dark .customer-row:hover,body.pp-dark .template-row:hover,body.pp-dark .schedule-row:hover{background:#18243a!important}
+body.pp-dark .note-box,body.pp-dark .aipp-customer-tools{background:#0e1727!important;color:#f8fafc!important}
+body.pp-dark .secondary{background:#233047!important;color:#f8fafc!important;border-color:#33445d!important}
+body.pp-dark .quick-status button{background:#18243a!important;color:#e5edf8!important;border-color:#33445d!important}
+body.pp-dark .pp-level-select,body.pp-dark .pp-report-grid>div{background:#121b2b!important;color:#f8fafc!important;border-color:#26354a!important}
+
+/* In dark mode inputs/selects follow selected Theme color, not plain black. */
+body.pp-dark input:not([type="checkbox"]):not([type="radio"]),body.pp-dark select,body.pp-dark textarea,
+body.pp-dark .search,body.pp-dark .filters select,body.pp-dark .schedule-filters select{
+  background:color-mix(in srgb,var(--aipp-accent,var(--primary)) 22%,#101827)!important;
+  color:#fff!important;
+  border-color:color-mix(in srgb,var(--aipp-accent,var(--primary)) 55%,#334155)!important;
+  color-scheme:dark;
+}
+body.pp-dark input::placeholder,body.pp-dark textarea::placeholder,body.pp-dark .search::placeholder{color:#b8c2d2!important}
+body.pp-dark select option{background:#121b2b!important;color:#fff!important}
+body.pp-dark input:focus,body.pp-dark select:focus,body.pp-dark textarea:focus,body.pp-dark .search:focus{
+  border-color:var(--aipp-accent,var(--primary))!important;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--aipp-accent,var(--primary)) 25%,transparent)!important;
+}
+
+/* Privacy V17 stays unchanged visually and functionally. */

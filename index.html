@@ -89,9 +89,9 @@
 
           <section class="panel"><h3>📄 Checklist hồ sơ</h3><p class="muted">Chọn các giấy tờ cần theo dõi cho từng khách.</p><div id="documentTypeList" class="settings-list"></div><button id="addDocumentTypeBtn" class="secondary full" type="button">+ Thêm loại giấy tờ</button></section>
 
-          <section class="panel"><h3>🔒 Quyền riêng tư</h3><p class="muted">Kiểm soát việc AIPP kết nối tới backend/API.</p>
+          <section class="panel" id="aippPrivacyCard"><h3>🔒 Quyền riêng tư</h3><p class="muted">Kiểm soát việc AIPP kết nối tới backend/API.</p>
             <label class="toggle-row"><div><strong>Offline Only / Chế độ riêng tư</strong><p>Khi bật, AIPP chặn kết nối API/backend và đồng bộ tự động. Dữ liệu khách vẫn lưu trên iPhone; gọi/SMS thủ công vẫn dùng được.</p></div><input id="offlineOnlyToggle" type="checkbox" /></label>
-            <div id="offlineOnlyState" class="mini-pill warn" style="width:max-content">Đang cho phép kết nối mạng</div>
+            <div id="offlineOnlyState" class="aipp-privacy-state bad">🌐 KẾT NỐI MẠNG ĐANG BẬT — API/backend được phép hoạt động</div>
           </section>
 
           <section class="panel"><h3>⚙️ Xử lý & gửi tin</h3>
