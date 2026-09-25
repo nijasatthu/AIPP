@@ -97,7 +97,7 @@ function renderDetail(){
   const pc=classifyPhone(x.phone),msg=firstTemplateMessage(x),sourceCard=state.settings.showSourceInfo?`<div class="detail-card"><span>Nguồn</span><strong>${esc(x.source||'—')}</strong></div>`:'';
   const statuses=['Không nghe','Máy bận','Đang tư vấn','Đã gửi Zalo','Đã gửi SMS','Hẹn gọi lại','Tiềm năng','Không nhu cầu','Hoàn tất'];
   $('#detailPanel').innerHTML=`
-    <div class="customer-summary"><div><h3>${esc(x.name)}</h3><div class="phone">${esc(x.phone)}</div><div class="phone-class"><span class="mini-pill ${pc.valid?'good':'bad'}">${esc(pc.type)}</span><span class="mini-pill">${esc(pc.origin)}</span><span class="mini-pill ${zaloPillClass(x.zaloStatus)}">${zaloLabel(x.zaloStatus)}</span></div></div><button class="secondary small" data-edit="${x.id}">✏️ Sửa</button></div>
+    <div class="customer-summary"><div class="customer-summary-main"><h3>${esc(x.name)}</h3><div class="phone">${esc(x.phone)}</div><div class="phone-class"><span class="mini-pill ${pc.valid?'good':'bad'}">${esc(pc.type)}</span><span class="mini-pill">${esc(pc.origin)}</span><span class="mini-pill ${zaloPillClass(x.zaloStatus)}">${zaloLabel(x.zaloStatus)}</span></div></div><div class="customer-head-actions"><button class="secondary small" data-edit="${x.id}" title="Sửa khách">✏️ <span>Sửa</span></button><button class="secondary small" data-schedule-customer="${x.id}" title="Nhắc hoặc gửi sau">🗓 <span>Nhắc/Gửi sau</span></button><button class="danger small" data-delete="${x.id}" title="Xóa khách">🗑 <span>Xóa</span></button></div></div>
     <div class="contact-actions">
       <a class="action-btn action-call" href="${esc(telHref(x.phone))}"><span>📞</span><span>Gọi</span></a>
       <a class="action-btn action-zalo" href="${esc(zaloHref(x.phone))}"><span>💬</span><span>Zalo</span></a>
@@ -106,7 +106,7 @@ function renderDetail(){
     <div class="secondary-actions"><button class="secondary" data-copy-template="${x.id}">📋 Tạo/copy tin</button><button class="secondary" data-check-zalo="${x.id}">🔎 Tra trạng thái Zalo</button><button class="secondary" data-schedule-customer="${x.id}">🗓 Lên lịch nhắn</button></div>
     <div class="quick-status-wrap"><div class="section-label">Cập nhật nhanh trạng thái</div><div class="quick-status">${statuses.map(s=>`<button class="${x.status===s?'active':''}" data-status="${esc(s)}" data-id="${x.id}">${esc(s)}</button>`).join('')}</div></div>
     <div class="info-grid"><div class="detail-card"><span>Trạng thái</span><strong>${esc(x.status)}</strong></div>${sourceCard}<div class="detail-card"><span>Nhu cầu</span><strong>${esc(x.product||'—')}</strong></div><div class="detail-card"><span>Gọi lại</span><strong>${fmtDate(x.followup)}</strong></div><div class="detail-card"><span>Zalo</span><div class="row-inline"><strong>${zaloLabel(x.zaloStatus)}</strong><button class="secondary small" data-zalo-state="yes" data-id="${x.id}">Có</button><button class="secondary small" data-zalo-state="no" data-id="${x.id}">Không</button><button class="secondary small" data-zalo-state="unknown" data-id="${x.id}">?</button></div></div></div>
-    <div class="note-box">${esc(x.note||'Chưa có ghi chú.')}</div><div class="customer-foot-actions"><button class="secondary" data-schedule-customer="${x.id}">🗓 Nhắc/gửi sau</button><button class="danger" data-delete="${x.id}">🗑 Xóa khách</button></div>`;
+    <div class="note-box">${esc(x.note||'Chưa có ghi chú.')}</div><div class="customer-foot-actions aipp-detail-end-marker" aria-hidden="true"></div>`;
 }
 function renderFollowups(){const a=state.customers.filter(x=>x.followup).sort((x,y)=>new Date(x.followup)-new Date(y.followup));$('#followupList').innerHTML=a.length?a.map(listItemHtml).join(''):'<div class="muted">Chưa có lịch gọi lại.</div>'}
 function renderTemplates(){$('#templateList').innerHTML=state.templates.length?state.templates.map(t=>`<div class="template-row"><div><strong>${esc(t.name)}</strong><p>${esc(t.text)}</p><div class="meta">ZBS Template ID: ${esc(t.zbsTemplateId||'chưa cấu hình')}</div></div><div class="template-actions"><button class="secondary small" data-edit-template="${t.id}">Sửa</button><button class="secondary small" data-delete-template="${t.id}">Xóa</button></div></div>`).join(''):'<div class="muted">Chưa có mẫu tin.</div>'}
@@ -563,14 +563,8 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
       sticky.className='aipp-sticky-customer';
       p.prepend(sticky);
     }
-    sticky.innerHTML=`<div><strong>👤 ${esc(c.name)}</strong><span>${esc(c.phone)}</span></div>
-      <button type="button" data-aipp-scroll-top>↑ Đầu trang</button>`;
+    sticky.innerHTML=`<div><strong>👤 ${esc(c.name)}</strong><span>${esc(c.phone)}</span></div>`;
   }
-  document.addEventListener('click',e=>{
-    if(e.target.closest('[data-aipp-scroll-top]')){
-      document.querySelector('#detailPanel')?.scrollIntoView({behavior:'smooth',block:'start'});
-    }
-  });
 
   // Clear status language for scheduled messaging.
   function decorateScheduleStatus(){
@@ -735,4 +729,15 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   function read(file){if(busy)return;busy=true;progress(true,1,`Đã nhận file: ${file.name}`);const ext=(file.name.split('.').pop()||'').toLowerCase();if(!['xlsx','xls','csv'].includes(ext))return error('Sai định dạng','Chỉ hỗ trợ .xlsx, .xls hoặc .csv');if(ext!=='csv'&&typeof XLSX==='undefined')return error('Thiếu bộ đọc Excel','Thư viện XLSX chưa tải được. Hãy kiểm tra kết nối Internet và tải lại AIPP.');const r=new FileReader();r.onerror=()=>error('Không mở được file',r.error?.message||'iPhone/Safari không đọc được file đã chọn.');r.onabort=()=>error('Đã hủy đọc file','FileReader bị hủy trước khi đọc xong.');r.onprogress=e=>{if(e.lengthComputable)progress(true,5+(e.loaded/e.total)*50,`Đang đọc file... ${Math.round(e.loaded/e.total*100)}%`)};r.onload=()=>{try{progress(true,62,'Đã đọc file · đang mở dữ liệu...');let rows;if(ext==='csv')rows=csv(r.result);else{const wb=XLSX.read(r.result,{type:'array',cellDates:false});if(!wb.SheetNames?.length)throw new Error('Không tìm thấy sheet trong Excel');progress(true,76,`Đang đọc sheet ${wb.SheetNames[0]}...`);rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:'',raw:false,blankrows:false})}progress(true,90,'Đang kiểm tra dữ liệu và số trùng...');const pack=build(rows,file.name);progress(true,100,'Hoàn tất · đang mở xem trước...');setTimeout(()=>preview(pack),150)}catch(e){error('Không đọc được dữ liệu',e.message||String(e))}};ext==='csv'?r.readAsText(file):r.readAsArrayBuffer(file)}
   function install(){const old=q('#importInput');if(!old)return;const fresh=old.cloneNode(true);fresh.value='';old.replaceWith(fresh);fresh.accept='.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv';fresh.addEventListener('change',e=>{const f=e.currentTarget.files?.[0];if(f)read(f);e.currentTarget.value=''});const btn=q('#ppImportBtn');if(btn){btn.onclick=e=>{e.preventDefault();if(busy)return;fresh.value='';fresh.click()};btn.title='Cột 1: Tên · Cột 2: SĐT · Cột 3+: Ghi chú'} }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+
+
+/* ===== AIPP V13 - GLOBAL BACK TO TOP ===== */
+(()=>{
+  const btn=document.querySelector('#aippBackToTop');
+  if(!btn)return;
+  const update=()=>btn.classList.toggle('show',window.scrollY>320);
+  window.addEventListener('scroll',update,{passive:true});
+  btn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+  update();
 })();

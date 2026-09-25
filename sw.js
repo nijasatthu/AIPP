@@ -1,4 +1,4 @@
-const CACHE_NAME='aipp-v12';
+const CACHE_NAME='aipp-v13';
 const APP_FILES=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest'];
 self.addEventListener('install',e=>{self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
