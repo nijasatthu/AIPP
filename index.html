@@ -75,7 +75,7 @@
           <section class="panel"><h3>🎨 Giao diện</h3><p class="muted">Tùy chỉnh màu sắc và mật độ hiển thị.</p>
             <div class="setting-selects">
               <label class="field"><span>Chế độ màu</span><select id="colorModeSelect"><option value="system">Theo hệ thống</option><option value="light">Sáng</option><option value="dark">Tối</option></select></label>
-              <label class="field"><span>Giao diện</span><select id="themeStyleSelect"><option value="soft-pink">Hồng nhẹ</option><option value="pink">Hồng tiêu chuẩn</option><option value="minimal">Tối giản</option></select></label>
+              <label class="field"><span>Giao diện</span><select id="themeStyleSelect"><option value="soft-pink">Hồng nhẹ</option><option value="pink">Hồng tiêu chuẩn</option><option value="blue">Xanh dương</option><option value="teal">Xanh ngọc</option><option value="green">Xanh lá</option><option value="purple">Tím</option><option value="orange">Cam</option><option value="red">Đỏ</option><option value="minimal">Tối giản</option></select></label>
               <label class="field"><span>Mật độ hiển thị</span><select id="densitySelect"><option value="comfortable">Thoải mái</option><option value="compact">Gọn</option><option value="dense">Rất gọn</option></select></label>
             </div>
           </section>
@@ -88,6 +88,11 @@
           </section>
 
           <section class="panel"><h3>📄 Checklist hồ sơ</h3><p class="muted">Chọn các giấy tờ cần theo dõi cho từng khách.</p><div id="documentTypeList" class="settings-list"></div><button id="addDocumentTypeBtn" class="secondary full" type="button">+ Thêm loại giấy tờ</button></section>
+
+          <section class="panel"><h3>🔒 Quyền riêng tư</h3><p class="muted">Kiểm soát việc AIPP kết nối tới backend/API.</p>
+            <label class="toggle-row"><div><strong>Offline Only / Chế độ riêng tư</strong><p>Khi bật, AIPP chặn kết nối API/backend và đồng bộ tự động. Dữ liệu khách vẫn lưu trên iPhone; gọi/SMS thủ công vẫn dùng được.</p></div><input id="offlineOnlyToggle" type="checkbox" /></label>
+            <div id="offlineOnlyState" class="mini-pill warn" style="width:max-content">Đang cho phép kết nối mạng</div>
+          </section>
 
           <section class="panel"><h3>⚙️ Xử lý & gửi tin</h3>
             <label class="toggle-row"><div><strong>Tự động xử lý lịch gửi</strong><p>Khi có backend, lịch sẽ được đẩy lên server.</p></div><input id="autoSendToggle" type="checkbox" /></label>
@@ -121,7 +126,7 @@
   <button id="aippBackToTop" class="aipp-back-to-top" type="button" aria-label="Lên đầu trang" title="Lên đầu trang">↑</button>
   <div id="toast" class="toast"></div>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260925-14"></script>
+  <script src="app.js?v=20260925-15"></script>
   <!-- AIPP V13: compact customer layout + global back-to-top button. -->
 
   <div id="aippNetworkStatus" class="aipp-network-status" role="status">Đang kiểm tra mạng…</div>
