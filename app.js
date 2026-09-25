@@ -173,7 +173,7 @@ document.addEventListener('click',async e=>{
 });
 
 $('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`telesale-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href)});
-// Import khách được xử lý duy nhất bởi AIPP Excel V4 ở phần dưới. Backup JSON dùng mục Khôi phục riêng.
+$('#importInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=migrateState(JSON.parse(r.result));state=j;selectedCustomerId=state.customers[0]?.id||null;save();toast('Đã nhập dữ liệu')}catch{alert('File dữ liệu không hợp lệ.')}};r.readAsText(f)});
 
 const previewLikely=location.protocol==='file:'||/Acode|; wv\)/i.test(navigator.userAgent);if(previewLikely)$('#browserNotice').classList.remove('hidden');$('#dismissBrowserNotice').addEventListener('click',()=>$('#browserNotice').classList.add('hidden'));
 if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('./sw.js').catch(()=>{});
@@ -419,7 +419,7 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
     const tools=document.createElement('div');tools.id='ppMobileTools';tools.className='pp-mobile-tools';
     tools.innerHTML=`<button type="button" class="secondary" id="ppImportBtn">📥 Nhập</button><button type="button" class="secondary" id="ppPasteBtn">📋 Dán</button>`;
     top.appendChild(tools);
-    // Import click is handled once by the delegated AIPP V7 handler below.
+    $('#ppImportBtn').onclick=()=>$('#importInput')?.click();
     $('#ppPasteBtn').onclick=async()=>{
       let raw='';
       try{raw=await navigator.clipboard.readText();}catch{raw=prompt('Dán danh sách: mỗi dòng dạng Tên, SĐT')||'';}
@@ -493,21 +493,13 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   // Backup / restore entry in Settings.
   function ensureBackup(){const v=$('#settingsView');if(!v||$('#ppBackupCard'))return;v.insertAdjacentHTML('beforeend',`<section class="panel pp-backup" id="ppBackupCard"><h3>💾 Sao lưu & khôi phục</h3><p class="muted">Backup toàn bộ khách, timeline, lịch gửi, mẫu tin và cài đặt.</p><div class="row-actions"><button class="secondary" id="ppBackupNow">Tạo backup</button><button class="secondary" id="ppRestoreBackup">Khôi phục file</button></div><input type="file" id="ppRestoreInput" accept="application/json" hidden></section>`);$('#ppBackupNow').onclick=()=>$('#exportBtn').click();$('#ppRestoreBackup').onclick=()=>$('#ppRestoreInput').click();$('#ppRestoreInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=migrateState(JSON.parse(r.result));if(!j.customers)throw 0;state=j;ensureCRMData();selectedCustomerId=state.customers[0]?.id||null;save();toast('Đã khôi phục backup thành công')}catch{toast('Backup không hợp lệ')}};r.readAsText(f)};}
   ensureBackup();
-  // AIPP Excel V5: explicit import dialog -> choose file -> read -> preview -> import.
+  // Excel / CSV Import V2 preview. JSON backup restore remains separate.
   function parseCSV(text){const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return [];const sep=(lines[0].match(/;/g)||[]).length>(lines[0].match(/,/g)||[]).length?';':',';return lines.map(line=>{let out=[],cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(ch===sep&&!q){out.push(cur.trim());cur=''}else cur+=ch}out.push(cur.trim());return out})}
   function normHeader(v){return String(v??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ').trim()}
   function findCol(headers,names){const hs=headers.map(normHeader),ns=names.map(normHeader);let i=hs.findIndex(h=>ns.includes(h));if(i>=0)return i;return hs.findIndex(h=>ns.some(n=>h.includes(n)||n.includes(h)))}
-  function importPhone(v){let p=normalizePhone(v);if(/^\d{9}$/.test(p))p='0'+p;return p}
-  let aippSelectedImportFile=null;
-  function setImportProgress(text,percent=20,show=true){const box=$('#importProgressBox'),txt=$('#importProgressText'),bar=$('#importProgressBar');if(!box)return;box.style.display=show?'block':'none';if(txt)txt.textContent=text;if(bar)bar.style.width=`${Math.max(5,Math.min(100,percent))}%`;}
-  function openAippImportDialog(){const d=$('#aippImportDialog');if(!d)return toast('Không tìm thấy màn hình Nhập dữ liệu');aippSelectedImportFile=null;const inp=$('#importInput');if(inp)inp.value='';$('#importSelectedInfo').textContent='Chưa chọn file.';$('#readImportFileBtn').disabled=true;setImportProgress('',5,false);d.showModal();}
-  function closeAippImportDialog(){$('#aippImportDialog')?.close();setImportProgress('',5,false)}
   function rowsToImport(rows,fileName=''){
-    if(!rows||rows.length<2){setImportProgress('',5,false);toast('File không có dữ liệu');return}
-    let headerIndex=-1;
-    for(let i=0;i<Math.min(rows.length,30);i++){const rr=Array.isArray(rows[i])?rows[i]:[];if(findCol(rr,['sđt','sdt','số điện thoại','điện thoại','phone','phone number','mobile'])>=0){headerIndex=i;break}}
-    if(headerIndex<0){setImportProgress('',5,false);toast('Không tìm thấy cột Số điện thoại trong 30 dòng đầu',5500);return}
-    const h=rows[headerIndex];
+    if(!rows||rows.length<2){toast('File không có dữ liệu');return}
+    const h=rows[0];
     const ni=findCol(h,['họ tên','họ và tên','tên khách hàng','khách hàng','tên','name','customer name']);
     const pi=findCol(h,['sđt','sdt','số điện thoại','điện thoại','phone','phone number','mobile']);
     const si=findCol(h,['nguồn','nguồn khách','source']);
@@ -515,46 +507,32 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
     const sti=findCol(h,['trạng thái','status']);
     const fi=findCol(h,['ngày hẹn','hẹn gọi lại','gọi lại','followup','follow up']);
     const noi=findCol(h,['ghi chú','note','notes']);
-    if(pi<0){setImportProgress('',5,false);return toast('Không nhận diện được cột Số điện thoại')}
-    const items=rows.slice(headerIndex+1).map((r,n)=>({row:headerIndex+n+2,name:ni>=0?String(r[ni]??'').trim():'Khách hàng',phone:importPhone(r[pi]??''),source:si>=0?String(r[si]??'').trim():'',product:pri>=0?String(r[pri]??'').trim():'',status:sti>=0?String(r[sti]??'').trim()||'Chưa gọi':'Chưa gọi',followup:fi>=0?String(r[fi]??'').trim():'',note:noi>=0?String(r[noi]??'').trim():''})).filter(x=>x.name||x.phone);
+    if(pi<0)return toast('Không nhận diện được cột Số điện thoại');
+    const items=rows.slice(1).map((r,n)=>({row:n+2,name:ni>=0?String(r[ni]??'').trim():'Khách hàng',phone:normalizePhone(r[pi]??''),source:si>=0?String(r[si]??'').trim():'',product:pri>=0?String(r[pri]??'').trim():'',status:sti>=0?String(r[sti]??'').trim()||'Chưa gọi':'Chưa gọi',followup:fi>=0?String(r[fi]??'').trim():'',note:noi>=0?String(r[noi]??'').trim():''})).filter(x=>x.name||x.phone);
     let valid=0,dup=0,bad=0;const seen=new Set(state.customers.map(c=>normalizePhone(c.phone)));
     items.forEach(x=>{if(!classifyPhone(x.phone).valid)bad++;else if(seen.has(x.phone))dup++;else{valid++;seen.add(x.phone)}});
-    setImportProgress('Đã đọc xong dữ liệu',100,true);
-    setTimeout(()=>{closeAippImportDialog();let dlg=$('#aippImportPreviewDialog');if(!dlg){dlg=document.createElement('dialog');dlg.id='aippImportPreviewDialog';document.body.appendChild(dlg)}const colName=i=>i>=0?`${i+1} (${esc(h[i])})`:'không có';dlg.innerHTML=`<div class="dialog-form"><div class="dialog-head"><h3>📥 Xem trước dữ liệu</h3><button type="button" class="icon-btn" id="aippClosePreview">✕</button></div><div class="pp-import-summary"><div><strong>${items.length}</strong><span>Tổng dòng</span></div><div><strong>${valid}</strong><span>Hợp lệ</span></div><div><strong>${dup}</strong><span>Trùng</span></div><div><strong>${bad}</strong><span>Lỗi</span></div></div><p class="muted">${esc(fileName)}<br>Tiêu đề ở dòng ${headerIndex+1}. Không cần đúng thứ tự cột.<br>Tên: ${colName(ni)} · SĐT: ${colName(pi)} · Nguồn: ${colName(si)} · Nhu cầu: ${colName(pri)}</p><div class="dialog-actions"><button type="button" class="secondary" id="aippCancelPreview">Hủy</button><button type="button" class="primary" id="aippConfirmImport" ${valid?'':'disabled'}>Nhập ${valid} khách</button></div></div>`;dlg.showModal();$('#aippClosePreview').onclick=$('#aippCancelPreview').onclick=()=>dlg.close();$('#aippConfirmImport').onclick=()=>{const btn=$('#aippConfirmImport');btn.disabled=true;btn.textContent=`Đang thêm ${valid} khách...`;setTimeout(()=>{try{let added=0,dupNow=0,badNow=0,firstId=null;const current=new Set(state.customers.map(c=>normalizePhone(c.phone)));items.forEach(x=>{if(!classifyPhone(x.phone).valid){badNow++;return}if(current.has(x.phone)){dupNow++;return}current.add(x.phone);const id=crypto.randomUUID();if(!firstId)firstId=id;state.customers.unshift({id,name:x.name||'Khách hàng',phone:x.phone,source:x.source,product:x.product,status:x.status||'Chưa gọi',followup:x.followup,note:x.note,zaloStatus:'unknown',level:'Quan tâm',timeline:[{id:crypto.randomUUID(),at:new Date().toISOString(),type:'note',title:'Nhập từ Excel/CSV',detail:`Dòng ${x.row}`}],profile:{},customFields:{},documents:{},updatedAt:new Date().toISOString()});added++});if(firstId)selectedCustomerId=firstId;save();dlg.close();showView('customers');renderAll();toast(`Đã nhập ${added} khách · Trùng ${dupNow} · Lỗi ${badNow}`,6000)}catch(err){btn.disabled=false;btn.textContent='Thử nhập lại';toast('Lỗi khi thêm khách: '+err.message,6000)}},80)};},180);
+    let dlg=$('#ppImportDialog');if(!dlg){dlg=document.createElement('dialog');dlg.id='ppImportDialog';document.body.appendChild(dlg)}
+    const colName=i=>i>=0?`${i+1} (${esc(h[i])})`:'không có';
+    dlg.innerHTML=`<div class="dialog-form"><div class="dialog-head"><h3>📥 Xem trước nhập Excel/CSV</h3><button class="icon-btn" onclick="this.closest('dialog').close()">✕</button></div><div class="pp-import-summary"><div><strong>${items.length}</strong><span>Tổng dòng</span></div><div><strong>${valid}</strong><span>Hợp lệ</span></div><div><strong>${dup}</strong><span>Trùng</span></div><div><strong>${bad}</strong><span>Lỗi</span></div></div><p class="muted">${esc(fileName)}<br>Đã tự nhận diện theo tên cột, không cần đúng thứ tự.<br>Tên: ${colName(ni)} · SĐT: ${colName(pi)} · Nguồn: ${colName(si)} · Nhu cầu: ${colName(pri)}</p><div class="dialog-actions"><button class="secondary" onclick="this.closest('dialog').close()">Hủy</button><button class="primary" id="ppConfirmCSV">Nhập ${valid} khách</button></div></div>`;
+    dlg.showModal();
+    $('#ppConfirmCSV').onclick=()=>{importLoading(true,`Đang thêm ${valid} khách hàng...`);setTimeout(()=>{try{let added=0,dupNow=0,badNow=0,firstId=null;const current=new Set(state.customers.map(c=>normalizePhone(c.phone)));items.forEach(x=>{if(!classifyPhone(x.phone).valid){badNow++;return}if(current.has(x.phone)){dupNow++;return}current.add(x.phone);const id=crypto.randomUUID();if(!firstId)firstId=id;state.customers.unshift({id,name:x.name||'Khách hàng',phone:x.phone,source:x.source,product:x.product,status:x.status||'Chưa gọi',followup:x.followup,note:x.note,zaloStatus:'unknown',level:'Quan tâm',timeline:[{id:crypto.randomUUID(),at:new Date().toISOString(),type:'note',title:'Nhập từ Excel/CSV',detail:`Dòng ${x.row}`}],profile:{},customFields:{},documents:{},updatedAt:new Date().toISOString()});added++});if(firstId)selectedCustomerId=firstId;save();dlg.close();showView('customers');renderAll();importLoading(false);toast(`Đã nhập ${added} khách · Bỏ qua ${dupNow} số trùng · ${badNow} dòng lỗi`,6000)}catch(err){importLoading(false);toast('Lỗi khi thêm khách: '+err.message,6000)}},60)};
   }
-  function readAippImportFile(){const file=aippSelectedImportFile;if(!file)return toast('Bạn chưa chọn file');const ext=(file.name.split('.').pop()||'').toLowerCase();setImportProgress(`Đang đọc ${file.name}...`,25,true);const reader=new FileReader();reader.onerror=()=>{setImportProgress('Không đọc được file',100,true);toast('Không đọc được file. Nếu file ở iCloud, hãy tải file về máy rồi thử lại.',6000)};if(ext==='csv'){reader.onload=()=>{try{setImportProgress('Đang phân tích các cột...',65,true);rowsToImport(parseCSV(reader.result),file.name)}catch(err){setImportProgress('Có lỗi khi đọc CSV',100,true);toast('Lỗi CSV: '+err.message,6000)}};reader.readAsText(file);return}if(ext==='xlsx'||ext==='xls'){if(typeof XLSX==='undefined'){setImportProgress('Bộ đọc Excel chưa tải',100,true);toast('Bộ đọc Excel chưa sẵn sàng. Hãy mở AIPP khi có Internet rồi thử lại.',6000);return}reader.onload=()=>{try{setImportProgress('Đang phân tích Excel...',65,true);const wb=XLSX.read(reader.result,{type:'array',cellDates:false});if(!wb.SheetNames.length)throw new Error('Excel không có sheet');const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});rowsToImport(rows,file.name)}catch(err){setImportProgress('Có lỗi khi đọc Excel',100,true);toast('Không đọc được Excel: '+err.message,6500)}};reader.readAsArrayBuffer(file);return}setImportProgress('Định dạng không hỗ trợ',100,true);toast('Chỉ hỗ trợ .xlsx, .xls hoặc .csv')}
-  const importEl=$('#importInput');
-  if(importEl){
-    importEl.onchange=()=>{
-      const f=importEl.files?.[0];
-      const info=$('#importSelectedInfo');
-      if(!f){
-        aippSelectedImportFile=null;
-        if(info)info.innerHTML='<strong>Chưa nhận được file.</strong><br><span class="muted">Hãy chọn lại file Excel/CSV.</span>';
-        setImportProgress('iPhone chưa trả file về AIPP',100,true);
-        return;
-      }
-      aippSelectedImportFile=f;
-      if(info)info.innerHTML=`<strong>✓ Đã nhận file:</strong> ${esc(f.name)}<br><span class="muted">${Math.max(1,Math.round(f.size/1024))} KB · AIPP đang tự đọc dữ liệu...</span>`;
-      $('#readImportFileBtn').disabled=false;
-      setImportProgress('✓ Đã nhận file — đang chuẩn bị đọc...',18,true);
-      toast(`✓ Đã nhận ${f.name}`,3500);
-      setTimeout(()=>readAippImportFile(),120);
-    };
+  function importLoading(show,text='Đang đọc dữ liệu...'){
+    let el=$('#aippImportLoading');
+    if(!el){el=document.createElement('div');el.id='aippImportLoading';el.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:24px';el.innerHTML='<div style="width:min(360px,92vw);background:#fff;border-radius:18px;padding:22px;text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.25)"><div style="width:42px;height:42px;border:4px solid #e5e7eb;border-top-color:#2563eb;border-radius:50%;margin:0 auto 14px;animation:aippSpin .8s linear infinite"></div><strong id="aippImportLoadingText">Đang đọc dữ liệu...</strong><div style="height:7px;background:#e5e7eb;border-radius:99px;margin-top:15px;overflow:hidden"><div style="height:100%;width:55%;background:#2563eb;border-radius:99px;animation:aippLoad 1.1s ease-in-out infinite alternate"></div></div><p style="margin:10px 0 0;color:#64748b;font-size:13px">Vui lòng không đóng AIPP trong lúc nhập.</p></div>';document.body.appendChild(el);if(!$('#aippImportAnim')){const st=document.createElement('style');st.id='aippImportAnim';st.textContent='@keyframes aippSpin{to{transform:rotate(360deg)}}@keyframes aippLoad{from{transform:translateX(-45%)}to{transform:translateX(90%)}}';document.head.appendChild(st)}}
+    $('#aippImportLoadingText').textContent=text;el.style.display=show?'flex':'none';
   }
-  $('#openImportDialogBtn')?.addEventListener('click',openAippImportDialog);
-  $('#chooseImportFileBtn')?.addEventListener('click',()=>{const i=$('#importInput');if(i){i.value='';i.click()}});
-  $('#readImportFileBtn')?.addEventListener('click',readAippImportFile);
-  $('#closeImportDialogBtn')?.addEventListener('click',closeAippImportDialog);
-  $('#cancelImportDialogBtn')?.addEventListener('click',closeAippImportDialog);
-
-  // AIPP V7: expose ONE import API for every UI button (mobile/header/sidebar).
-  window.AIPP_IMPORT = {
-    open: openAippImportDialog,
-    close: closeAippImportDialog,
-    choose: ()=>{ const i=$('#importInput'); if(i){ i.value=''; i.click(); } },
-    read: readAippImportFile
-  };
+  function importPreview(file){
+    const ext=(file.name.split('.').pop()||'').toLowerCase();
+    importLoading(true,`Đang đọc ${file.name}...`);
+    if(ext==='csv'){const r=new FileReader();r.onerror=()=>{importLoading(false);toast('Không đọc được file CSV',5000)};r.onload=()=>{try{importLoading(true,'Đang phân tích các cột...');rowsToImport(parseCSV(r.result),file.name)}finally{importLoading(false)}};r.readAsText(file);return}
+    if(ext==='xlsx'||ext==='xls'){
+      if(typeof XLSX==='undefined'){importLoading(false);toast('Chưa tải được bộ đọc Excel. Hãy mở AIPP khi có Internet rồi thử lại.',5000);return}
+      const r=new FileReader();r.onerror=()=>{importLoading(false);toast('Không đọc được file Excel từ iCloud. Hãy tải file về máy rồi thử lại.',5500)};r.onload=()=>{try{importLoading(true,'Đang phân tích Excel...');const wb=XLSX.read(r.result,{type:'array',cellDates:false,raw:false});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});rowsToImport(rows,file.name)}catch(err){toast('Không đọc được file Excel: '+err.message,5000)}finally{importLoading(false)}};r.readAsArrayBuffer(file);return
+    }
+    importLoading(false);toast('Chỉ hỗ trợ Excel .xlsx/.xls hoặc CSV');
+  }
+  const importEl=$('#importInput');if(importEl){importEl.accept='.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv';importEl.addEventListener('change',e=>{const f=e.target.files[0];if(f&&/\.(xlsx|xls|csv)$/i.test(f.name)){e.stopImmediatePropagation();importPreview(f);e.target.value=''}},true)}
   // Refresh injected pieces after normal render.
   const oldAll=renderAll;renderAll=function(){ensureCRMData();oldAll();ensureAdvancedFilters();ensureReport();renderReport();ensureBackup();};renderAll();
 })();
@@ -731,14 +709,10 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   }
   document.addEventListener('click',e=>{if(e.target.closest('[data-aipp-open-customer]'))document.querySelector('#detailPanel')?.scrollIntoView({behavior:'smooth',block:'start'})});
 
-  // AIPP V7: all Import entry buttons use the same public import module.
+  // Working Import button: always opens the real file picker.
   document.addEventListener('click',e=>{
-    const b=e.target.closest('#ppImportBtn,#openImportDialogBtn,[data-import-customers]');
-    if(!b)return;
-    e.preventDefault();
-    e.stopPropagation();
-    if(window.AIPP_IMPORT?.open) window.AIPP_IMPORT.open();
-    else toast('Mô-đun Nhập chưa sẵn sàng. Hãy tải lại AIPP.',5000);
+    const b=e.target.closest('#ppImportBtn,[data-import-customers]'); if(!b)return;
+    e.preventDefault(); document.querySelector('#importInput')?.click();
   },true);
 
   // Paste opens guidance first, then user pastes text.
