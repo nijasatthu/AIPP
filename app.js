@@ -837,3 +837,126 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   renderCustomers();
   renderDetail();
 })();
+
+/* ===== AIPP V13.1 - STICKY CUSTOMER ACTIONS + BACK TO TOP ===== */
+(()=>{
+  let stickyScrollBound=false;
+
+  function ensureBackToTop(){
+    let btn=document.querySelector('#aippBackToTop');
+    if(!btn){
+      btn=document.createElement('button');
+      btn.id='aippBackToTop';
+      btn.type='button';
+      btn.setAttribute('aria-label','Lên đầu trang');
+      btn.title='Lên đầu trang';
+      btn.innerHTML='⬆️';
+      document.body.appendChild(btn);
+      btn.addEventListener('click',e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});});
+    }
+    const update=()=>btn.classList.toggle('show',window.scrollY>220);
+    if(!btn.dataset.aippScrollBound){
+      btn.dataset.aippScrollBound='1';
+      window.addEventListener('scroll',update,{passive:true});
+    }
+    update();
+  }
+
+  function renderStickyActions(){
+    const panel=document.querySelector('#detailPanel');
+    const view=document.querySelector('#customersView');
+    const c=state.customers.find(x=>x.id===selectedCustomerId);
+    let bar=document.querySelector('#aippFixedCustomer');
+    if(!panel||!view||!c){bar?.classList.remove('show');return;}
+    if(!bar){
+      bar=document.createElement('div');
+      bar.id='aippFixedCustomer';
+      bar.className='aipp-fixed-customer';
+      document.body.appendChild(bar);
+    }
+    bar.innerHTML=`
+      <div class="aipp-fixed-info" data-aipp-open-customer>
+        <b>👤 ${esc(c.name)}</b>
+        <span>${esc(c.phone)} · ${esc(c.status||'Chưa gọi')}</span>
+      </div>
+      <div class="aipp-fixed-actions">
+        <button type="button" class="secondary" data-schedule-customer="${esc(c.id)}" title="Nhắc hoặc gửi sau">🗓 <span>Nhắc/Gửi sau</span></button>
+        <button type="button" class="danger" data-delete="${esc(c.id)}" title="Xóa khách">🗑 <span>Xóa</span></button>
+        <button type="button" class="secondary aipp-fixed-detail" data-aipp-open-customer title="Chi tiết">Chi tiết</button>
+      </div>`;
+
+    const update=()=>{
+      const r=panel.getBoundingClientRect();
+      const active=view.classList.contains('active');
+      bar.classList.toggle('show',active && r.top<155 && r.bottom>125);
+    };
+    update();
+    if(!stickyScrollBound){
+      stickyScrollBound=true;
+      window.addEventListener('scroll',()=>{
+        const b=document.querySelector('#aippFixedCustomer');
+        const p=document.querySelector('#detailPanel');
+        const v=document.querySelector('#customersView');
+        if(!b||!p||!v)return;
+        const r=p.getBoundingClientRect();
+        b.classList.toggle('show',v.classList.contains('active') && r.top<155 && r.bottom>125);
+      },{passive:true});
+    }
+  }
+
+  document.addEventListener('click',e=>{
+    const open=e.target.closest('[data-aipp-open-customer]');
+    if(open){
+      e.preventDefault();
+      document.querySelector('#detailPanel')?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+
+  if(!document.querySelector('#aippStickyActionStyle')){
+    const style=document.createElement('style');
+    style.id='aippStickyActionStyle';
+    style.textContent=`
+      #aippFixedCustomer.aipp-fixed-customer{
+        position:fixed;left:50%;transform:translateX(-50%) translateY(-12px);
+        top:max(8px,env(safe-area-inset-top));z-index:9990;
+        width:min(760px,calc(100% - 24px));box-sizing:border-box;
+        display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;
+        padding:9px 10px;background:rgba(255,255,255,.97);border:1px solid #dbe2ec;
+        border-radius:18px;box-shadow:0 8px 28px rgba(15,23,42,.18);
+        opacity:0;pointer-events:none;transition:.18s ease;
+      }
+      #aippFixedCustomer.show{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+      #aippFixedCustomer .aipp-fixed-info{min-width:0;cursor:pointer}
+      #aippFixedCustomer .aipp-fixed-info b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px}
+      #aippFixedCustomer .aipp-fixed-info span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:#64748b;margin-top:2px}
+      #aippFixedCustomer .aipp-fixed-actions{display:flex;gap:5px;align-items:center}
+      #aippFixedCustomer .aipp-fixed-actions button{margin:0!important;white-space:nowrap;padding:8px 9px!important;border-radius:11px!important;font-size:12px!important;font-weight:800!important;min-width:0!important}
+      #aippBackToTop{
+        position:fixed;right:14px;top:calc(max(8px,env(safe-area-inset-top)) + 92px);z-index:9989;
+        width:44px;height:44px;border:0;border-radius:50%;background:#111827;color:#fff;
+        box-shadow:0 6px 20px rgba(15,23,42,.25);font-size:20px;display:flex;align-items:center;justify-content:center;
+        opacity:0;pointer-events:none;transform:translateY(-8px);transition:.18s ease;
+      }
+      #aippBackToTop.show{opacity:.94;pointer-events:auto;transform:translateY(0)}
+      @media(max-width:920px){
+        #aippFixedCustomer.aipp-fixed-customer{width:calc(100% - 16px);grid-template-columns:minmax(0,1fr);gap:6px;padding:8px}
+        #aippFixedCustomer .aipp-fixed-actions{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,.72fr) minmax(0,.8fr);width:100%}
+        #aippFixedCustomer .aipp-fixed-actions button{width:100%;padding:7px 5px!important;font-size:11px!important}
+        #aippFixedCustomer .aipp-fixed-info b{font-size:14px}
+        #aippBackToTop{right:10px;top:calc(max(8px,env(safe-area-inset-top)) + 118px);width:40px;height:40px;font-size:18px}
+      }
+      @media(max-width:380px){
+        #aippFixedCustomer .aipp-fixed-actions button span{font-size:10px}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const prevRenderDetailSticky=renderDetail;
+  renderDetail=function(){prevRenderDetailSticky();renderStickyActions();ensureBackToTop();};
+  const prevRenderAllSticky=renderAll;
+  renderAll=function(){prevRenderAllSticky();renderStickyActions();ensureBackToTop();};
+
+  ensureBackToTop();
+  renderStickyActions();
+})();
