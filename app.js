@@ -419,7 +419,7 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
     const tools=document.createElement('div');tools.id='ppMobileTools';tools.className='pp-mobile-tools';
     tools.innerHTML=`<button type="button" class="secondary" id="ppImportBtn">📥 Nhập</button><button type="button" class="secondary" id="ppPasteBtn">📋 Dán</button>`;
     top.appendChild(tools);
-    $('#ppImportBtn').onclick=()=>openAippImportDialog();
+    // Import click is handled once by the delegated AIPP V7 handler below.
     $('#ppPasteBtn').onclick=async()=>{
       let raw='';
       try{raw=await navigator.clipboard.readText();}catch{raw=prompt('Dán danh sách: mỗi dòng dạng Tên, SĐT')||'';}
@@ -547,6 +547,14 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   $('#readImportFileBtn')?.addEventListener('click',readAippImportFile);
   $('#closeImportDialogBtn')?.addEventListener('click',closeAippImportDialog);
   $('#cancelImportDialogBtn')?.addEventListener('click',closeAippImportDialog);
+
+  // AIPP V7: expose ONE import API for every UI button (mobile/header/sidebar).
+  window.AIPP_IMPORT = {
+    open: openAippImportDialog,
+    close: closeAippImportDialog,
+    choose: ()=>{ const i=$('#importInput'); if(i){ i.value=''; i.click(); } },
+    read: readAippImportFile
+  };
   // Refresh injected pieces after normal render.
   const oldAll=renderAll;renderAll=function(){ensureCRMData();oldAll();ensureAdvancedFilters();ensureReport();renderReport();ensureBackup();};renderAll();
 })();
@@ -723,10 +731,14 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   }
   document.addEventListener('click',e=>{if(e.target.closest('[data-aipp-open-customer]'))document.querySelector('#detailPanel')?.scrollIntoView({behavior:'smooth',block:'start'})});
 
-  // Working Import button: always opens the real file picker.
+  // AIPP V7: all Import entry buttons use the same public import module.
   document.addEventListener('click',e=>{
-    const b=e.target.closest('[data-import-customers]'); if(!b)return;
-    e.preventDefault(); openAippImportDialog();
+    const b=e.target.closest('#ppImportBtn,#openImportDialogBtn,[data-import-customers]');
+    if(!b)return;
+    e.preventDefault();
+    e.stopPropagation();
+    if(window.AIPP_IMPORT?.open) window.AIPP_IMPORT.open();
+    else toast('Mô-đun Nhập chưa sẵn sàng. Hãy tải lại AIPP.',5000);
   },true);
 
   // Paste opens guidance first, then user pastes text.
