@@ -35,7 +35,7 @@
       </nav>
       <div class="sidebar-bottom">
         <label class="field compact"><span>Tên nhân viên</span><input id="agentName" placeholder="Ví dụ: Phúc" /></label>
-        <div class="side-buttons"><button id="exportBtn" class="secondary full">Xuất dữ liệu</button><label class="secondary full file-btn">Nhập dữ liệu<input id="importInput" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" />
+        <div class="side-buttons"><button id="exportBtn" class="secondary full">Xuất dữ liệu</button><label class="secondary full file-btn">Nhập dữ liệu<input id="importInput" title="Cột 1: Tên khách · Cột 2: SĐT · Cột 3 trở đi: Ghi chú" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" />
       </div>
     </aside>
 
@@ -120,7 +120,7 @@
 
   <div id="toast" class="toast"></div>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260925-9"></script>
+  <script src="app.js?v=20260925-10"></script>
   <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {

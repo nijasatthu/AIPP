@@ -613,7 +613,27 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   }
   const importEl=$('#importInput');if(importEl){
     importEl.accept='.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv';
-    importEl.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(/\.(xlsx|xls|csv)$/i.test(f.name)){e.stopImmediatePropagation();importPreview(f)}else toast('Chỉ hỗ trợ Excel .xlsx/.xls hoặc CSV');e.target.value=''},true);
+    let aippImportBusy=false,lastImportKey='';
+    const receiveImportFile=e=>{
+      const input=e.currentTarget||e.target;
+      const f=input?.files?.[0];
+      if(!f)return;
+      e.stopImmediatePropagation?.();
+      const key=`${f.name}|${f.size}|${f.lastModified}`;
+      if(aippImportBusy&&key===lastImportKey)return;
+      if(!/\.(xlsx|xls|csv)$/i.test(f.name)){toast('Chỉ hỗ trợ Excel .xlsx/.xls hoặc CSV');input.value='';return;}
+      aippImportBusy=true;lastImportKey=key;
+      setImportProgress(1,`Đã nhận file ${f.name}...`);
+      setTimeout(()=>{
+        try{importPreview(f)}catch(err){hideImportProgress();toast('Lỗi khi bắt đầu đọc file: '+(err?.message||err),6000)}
+        finally{setTimeout(()=>{aippImportBusy=false;lastImportKey='';},800)}
+      },50);
+      setTimeout(()=>{try{input.value=''}catch{}},0);
+    };
+    // iPhone/Safari có phiên bản phát input ổn định hơn change khi quay lại từ Files.
+    importEl.addEventListener('input',receiveImportFile,true);
+    importEl.addEventListener('change',receiveImportFile,true);
+    importEl.addEventListener('click',()=>{if(!aippImportBusy)importEl.value=''},true);
   }
   // Refresh injected pieces after normal render.
   const oldAll=renderAll;renderAll=function(){ensureCRMData();oldAll();ensureAdvancedFilters();ensureReport();renderReport();ensureBackup();};renderAll();
@@ -794,7 +814,9 @@ renderAll();processDueSchedules();if(apiBase())testBackend();setInterval(process
   // Working Import button: always opens the real file picker.
   document.addEventListener('click',e=>{
     const b=e.target.closest('#ppImportBtn,[data-import-customers]'); if(!b)return;
-    e.preventDefault(); document.querySelector('#importInput')?.click();
+    e.preventDefault();
+    const input=document.querySelector('#importInput');
+    if(input){try{input.value=''}catch{} input.click();}
   },true);
 
   // Paste opens guidance first, then user pastes text.
