@@ -1,5 +1,5 @@
 {
-  "name": "AIPP",
+  "name": "AIPP Telesale Assistant",
   "short_name": "AIPP",
   "description": "AIPP - Trợ lý hỗ trợ công việc",
   "start_url": "./index.html",
@@ -19,5 +19,15 @@
       "sizes": "512x512",
       "type": "image/png"
     }
+  ],
+  "id": "./",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "lang": "vi",
+  "categories": [
+    "business",
+    "productivity"
   ]
 }

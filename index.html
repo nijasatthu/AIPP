@@ -13,7 +13,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="aipp-dashboard-active">
   <div id="browserNotice" class="browser-notice hidden">
     <div><strong>👋 Chào bạn!</strong><span> Phúc chúc bạn một ngày làm việc nhiều năng lượng và xử lý thật nhiều khách 💗</span></div>
     <button id="dismissBrowserNotice" class="notice-close">✕</button>
@@ -41,29 +41,29 @@
 
     <main class="main">
       <header class="topbar">
-        <div><h2 id="pageTitle">Tổng quan hôm nay</h2><p id="todayText"></p></div>
+        <div><h2 id="pageTitle">Tổng quan</h2><p id="todayText"></p></div>
         <div class="top-actions"><input id="globalSearch" class="search" placeholder="Tìm tên hoặc số điện thoại..." /><button id="addCustomerBtn" class="primary">+ Thêm khách</button></div>
       </header>
 
-      <section id="dashboardView" class="view active">
+      <section id="dashboardView" class="view active aipp-home-v2">
         <div class="stats-grid" id="statsGrid"></div>
-        <div class="two-col">
-          <section class="panel"><div class="panel-head"><h3>Việc cần làm tiếp</h3><span class="badge" id="todoCount"></span></div><div id="todoList" class="list"></div></section>
-          <section class="panel"><div class="panel-head"><h3>Tin nhắn đến lịch</h3><span class="badge" id="dueMessageCount"></span></div><div id="dueMessageList" class="list"></div></section>
+        <section class="panel aipp-home-focus"><div class="panel-head"><div><small class="aipp-eyebrow">HÔM NAY</small><h3>📌 Việc cần làm</h3></div><span class="badge" id="todoCount"></span></div><div id="todoList" class="list"></div></section>
+        <div class="aipp-home-secondary">
+          <section class="panel aipp-home-due"><div class="panel-head"><h3>📨 Tin đến lịch</h3><span class="badge" id="dueMessageCount"></span></div><div id="dueMessageList" class="list"></div></section>
+          <section class="panel dashboard-hot"><div class="panel-head"><h3>🔥 Khách tiềm năng</h3><span class="badge hot">HOT</span></div><div id="hotList" class="list"></div></section>
         </div>
-        <section class="panel dashboard-hot"><div class="panel-head"><h3>Khách tiềm năng</h3><span class="badge hot">HOT</span></div><div id="hotList" class="list"></div></section>
       </section>
 
       <section id="customersView" class="view">
-        <div class="panel filters"><select id="statusFilter"><option value="">Tất cả trạng thái</option><option>Chưa gọi</option><option>Không nghe</option><option>Máy bận</option><option>Đang tư vấn</option><option>Đã gửi Zalo</option><option>Đã gửi SMS</option><option>Hẹn gọi lại</option><option>Tiềm năng</option><option>Không nhu cầu</option><option>Hoàn tất</option></select><select id="sourceFilter"><option value="">Tất cả nguồn</option></select><button id="nextCustomerBtn" class="secondary">▶ Khách tiếp theo</button></div>
+        <div class="panel filters"><select id="statusFilter"><option value="">Tất cả trạng thái</option><option>Chưa gọi</option><option>Không nghe</option><option>Đang tư vấn</option><option>Đã gửi thông tin</option><option>Hẹn gọi lại</option><option>Tiềm năng</option><option>Không nhu cầu</option><option>Hoàn tất</option></select><select id="sourceFilter"><option value="">Tất cả nguồn</option></select><select id="carrierFilter"><option value="">Tất cả nhà mạng</option><option>Viettel</option><option>VinaPhone</option><option>MobiFone</option><option>Vietnamobile</option><option>Gmobile</option><option>iTel</option><option>Wintel</option><option value="other">Khác</option></select><button id="nextCustomerBtn" class="secondary">▶ Khách tiếp theo</button></div>
         <div class="customer-layout"><section class="panel customer-list-panel"><div id="customerList" class="customer-list"></div></section><section class="panel detail-panel" id="detailPanel"></section></div>
       </section>
 
       <section id="followupsView" class="view"><section class="panel"><div class="panel-head"><h3>Lịch gọi lại</h3></div><div id="followupList" class="list"></div></section></section>
 
       <section id="automationView" class="view">
-        <div class="automation-toolbar panel"><div><h3>Lịch gửi tin</h3><p class="muted">Nếu backend V3 đang chạy, lịch có thể được đồng bộ lên server để xử lý kể cả khi đóng trình duyệt.</p></div><button id="addScheduleBtn" class="primary">+ Lên lịch gửi</button></div>
-        <div class="panel"><div class="schedule-filters"><select id="scheduleStatusFilter"><option value="">Tất cả lịch</option><option value="scheduled">Đã lên lịch</option><option value="manual">Cần gửi thủ công</option><option value="sent">Đã gửi</option><option value="failed">Lỗi</option><option value="cancelled">Đã hủy</option></select><button id="syncSchedulesBtn" class="secondary small">↻ Đồng bộ server</button></div><div id="scheduleList" class="schedule-list"></div></div>
+        <div class="automation-toolbar panel"><div><h3>Lịch gửi tin</h3><p class="muted">Android sẽ giữ lịch và gửi SMS bằng SIM ngay cả khi AIPP không mở.</p></div><div class="automation-actions"><button id="bulkScheduleBtn" class="secondary">👥 Gửi nhiều khách</button><button id="addScheduleBtn" class="primary">+ Lên lịch gửi</button></div></div>
+        <div class="panel"><div class="schedule-filters"><select id="scheduleStatusFilter"><option value="">Tất cả lịch</option><option value="scheduled">Đã lên lịch</option><option value="manual">Cần gửi thủ công</option><option value="sent">Đã gửi</option><option value="failed">Lỗi</option><option value="blocked">Chặn gửi trùng</option><option value="cancelled">Đã hủy</option></select><button id="syncSchedulesBtn" class="secondary small hidden" type="button">Android SMS</button><span class="mini-pill good">📱 Android SMS</span></div><div id="scheduleList" class="schedule-list"></div></div>
       </section>
 
       <section id="templatesView" class="view">
@@ -76,8 +76,27 @@
             <div class="setting-selects">
               <label class="field"><span>Chế độ màu</span><select id="colorModeSelect"><option value="system">Theo hệ thống</option><option value="light">Sáng</option><option value="dark">Tối</option></select></label>
               <label class="field"><span>Giao diện</span><select id="themeStyleSelect"><option value="soft-pink">Hồng nhẹ</option><option value="pink">Hồng tiêu chuẩn</option><option value="blue">Xanh dương</option><option value="teal">Xanh ngọc</option><option value="green">Xanh lá</option><option value="purple">Tím</option><option value="orange">Cam</option><option value="red">Đỏ</option><option value="minimal">Tối giản</option></select></label>
-              <label class="field"><span>Mật độ hiển thị</span><select id="densitySelect"><option value="comfortable">Thoải mái</option><option value="compact">Gọn</option><option value="dense">Rất gọn</option></select></label>
+              <label class="field"><span>Cỡ chữ</span><select id="fontSizeSelect"><option value="small">Nhỏ</option><option value="normal">Mặc định</option><option value="large">Lớn</option></select></label><label class="field"><span>Mật độ danh sách</span><select id="densitySelect"><option value="compact">Gọn</option><option value="comfortable">Vừa</option><option value="spacious">Lớn</option></select></label>
             </div>
+          </section>
+
+          <section class="panel" id="customerPaginationSettings">
+            <h3>📑 Danh sách khách</h3>
+            <p class="muted">Tùy chỉnh số khách hiển thị trên mỗi trang. Thay đổi được áp dụng ngay cho toàn bộ danh sách khách.</p>
+            <label class="field customer-page-size-field">
+              <span>Số khách mỗi trang</span>
+              <div class="customer-page-size-input-row">
+                <input id="customerPageSizeSetting" type="number" min="5" max="100" step="1" value="25" inputmode="numeric" aria-describedby="customerPageSizeHelp" />
+                <span>khách / trang</span>
+              </div>
+            </label>
+            <div class="customer-page-size-presets" aria-label="Chọn nhanh số khách mỗi trang">
+              <button type="button" class="secondary small" data-page-size-preset="20">20</button>
+              <button type="button" class="secondary small" data-page-size-preset="25">25</button>
+              <button type="button" class="secondary small" data-page-size-preset="30">30</button>
+              <button type="button" class="secondary small" data-page-size-preset="50">50</button>
+            </div>
+            <p class="muted customer-page-size-help" id="customerPageSizeHelp">Có thể nhập từ 5 đến 100 khách/trang. AIPP sẽ ghi nhớ lựa chọn cho lần mở sau.</p>
           </section>
 
           <section class="panel"><h3>👁 Hiển thị chức năng</h3><p class="muted">Bật/tắt các chức năng bạn muốn sử dụng.</p><div id="featureToggleList" class="settings-list"></div></section>
@@ -89,17 +108,17 @@
 
           <section class="panel"><h3>📄 Checklist hồ sơ</h3><p class="muted">Chọn các giấy tờ cần theo dõi cho từng khách.</p><div id="documentTypeList" class="settings-list"></div><button id="addDocumentTypeBtn" class="secondary full" type="button">+ Thêm loại giấy tờ</button></section>
 
-          <section class="panel" id="aippPrivacyCard"><h3>🔒 Quyền riêng tư</h3><p class="muted">Kiểm soát việc AIPP kết nối tới backend/API.</p>
-            <label class="toggle-row"><div><strong>Offline Only / Chế độ riêng tư</strong><p>Khi bật, AIPP chặn kết nối API/backend và đồng bộ tự động. Dữ liệu khách vẫn lưu trên iPhone; gọi/SMS thủ công vẫn dùng được.</p></div><input id="offlineOnlyToggle" type="checkbox" /></label>
+          <section class="panel" id="aippPrivacyCard"><h3>🔒 Quyền riêng tư</h3><p class="muted">Dữ liệu khách được lưu cục bộ trong AIPP trên thiết bị.</p>
+            <label class="toggle-row"><div><strong>Offline Only / Chế độ riêng tư</strong><p>Chế độ này giữ AIPP hoạt động cục bộ. SMS Android theo lịch không cần Backend V3.</p></div><input id="offlineOnlyToggle" type="checkbox" /></label>
             <div id="offlineOnlyState" class="aipp-privacy-state bad">🌐 KẾT NỐI MẠNG ĐANG BẬT — API/backend được phép hoạt động</div>
           </section>
 
-          <section class="panel"><h3>⚙️ Xử lý & gửi tin</h3>
-            <label class="toggle-row"><div><strong>Tự động xử lý lịch gửi</strong><p>Khi có backend, lịch sẽ được đẩy lên server.</p></div><input id="autoSendToggle" type="checkbox" /></label>
-            <label class="toggle-row"><div><strong>Tự chuyển sang SMS</strong><p>Dùng SMS khi Zalo không phù hợp hoặc không có Zalo.</p></div><input id="smsFallbackToggle" type="checkbox" /></label>
+          <section class="panel android-sms-settings"><h3>📱 SMS Android</h3>
+            <label class="toggle-row"><div><strong>Tự động gửi SMS theo lịch</strong><p>Android sẽ lên lịch và gửi SMS bằng SIM khi đến giờ.</p></div><input id="autoSendToggle" type="checkbox" /></label>
+            <label class="toggle-row hidden"><div><strong>SMS</strong></div><input id="smsFallbackToggle" type="checkbox" checked /></label>
           </section>
 
-          <section class="panel"><div class="panel-head"><h3>🔌 Kết nối API</h3><span id="apiOverallBadge" class="mini-pill warn">Chưa kiểm tra</span></div>
+          <section class="panel hidden"><div class="panel-head"><h3>🔌 Kết nối API</h3><span id="apiOverallBadge" class="mini-pill warn">Chưa kiểm tra</span></div>
             <label class="field"><span>Địa chỉ Backend V3</span><input id="backendBaseUrl" placeholder="https://api..." /></label><label class="field"><span>APP_API_KEY</span><input id="backendApiKey" type="password" /></label>
             <div class="api-status-grid"><div><span>Zalo ZBS</span><strong id="zaloApiStatus">—</strong></div><div><span>Tra Zalo</span><strong id="lookupApiStatus">—</strong></div><div><span>SMS</span><strong id="smsApiStatus">—</strong></div></div>
             <div class="row-actions"><button id="testApiBtn" class="secondary">Kiểm tra</button><button id="saveSettingsBtn" class="primary">Lưu cài đặt</button></div>
@@ -110,23 +129,162 @@
   <p class="muted">Bật/tắt các mục hiển thị trên màn hình Tổng quan.</p>
   <div id="aippDashboardToggleList" class="settings-list"></div>
 </section>
-<section class="panel settings-info"><h3>💗 Phuc.Pink</h3><div class="app-info-grid"><span>Ứng dụng</span><strong>Phuc.Pink</strong><span>Phiên bản</span><strong>V5</strong><span>Tác giả</span><strong>Phúc</strong></div><p class="muted">Phát triển bởi Phúc</p></section>
+<section class="panel settings-info developer-info-card">
+  <div class="developer-app-head">
+    <img src="aipp_logo_1024.png" class="developer-app-logo" alt="AIPP logo" />
+    <div><h3>AIPP – Telesale Assistant</h3><p class="muted">Trợ lý quản lý khách hàng và công việc telesale.</p></div>
+  </div>
+  <div class="app-info-grid">
+    <span>Phiên bản</span><strong>V6.2.1 – Smart Care</strong>
+    <span>Người phát triển</span><strong>Phúc</strong>
+    <span>Nền tảng</span><strong>Android</strong>
+    <span>Lưu trữ</span><strong>Cục bộ trên thiết bị</strong>
+  </div>
+  <div class="developer-note">👨‍💻 <strong>Phát triển bởi Phúc</strong><br><span>AIPP được xây dựng để hỗ trợ quản lý khách, liên hệ, lịch chăm sóc và SMS thuận tiện hơn trên điện thoại.</span></div>
+</section>
         </div>
         <input id="showSourceInfoToggle" type="checkbox" hidden />
       </section>
     </main>
   </div>
 
-  <dialog id="customerDialog"><form id="customerForm" class="dialog-form" novalidate><div class="dialog-head"><h3 id="dialogTitle">Thêm khách hàng</h3><button type="button" class="icon-btn" data-close-dialog="customerDialog">✕</button></div><input type="hidden" id="customerId" /><div class="form-grid"><label class="field"><span>Họ tên *</span><input id="nameInput" /></label><label class="field"><span>Số điện thoại *</span><input id="phoneInput" inputmode="tel" autocomplete="tel" /></label><label class="field source-field"><span>Nguồn khách</span><input id="sourceInput" placeholder="CRM, Facebook, data riêng..." /></label><label class="field"><span>Sản phẩm/Nhu cầu</span><input id="productInput" /></label><label class="field"><span>Trạng thái</span><select id="statusInput"><option>Chưa gọi</option><option>Không nghe</option><option>Máy bận</option><option>Đang tư vấn</option><option>Đã gửi Zalo</option><option>Đã gửi SMS</option><option>Hẹn gọi lại</option><option>Tiềm năng</option><option>Không nhu cầu</option><option>Hoàn tất</option></select></label><label class="field"><span>Hẹn gọi lại</span><input id="followupInput" type="datetime-local" /></label><label class="field"><span>Trạng thái Zalo</span><select id="zaloStatusInput"><option value="unknown">Chưa xác minh</option><option value="yes">Có Zalo</option><option value="no">Không có Zalo</option></select></label><div id="dynamicCustomerFields" class="dynamic-customer-fields full-span"></div><label class="field full-span"><span>Ghi chú</span><textarea id="noteInput" rows="4"></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="customerDialog">Hủy</button><button type="submit" class="primary">Lưu khách hàng</button></div></form></dialog>
+  <dialog id="customerDialog"><form id="customerForm" class="dialog-form" novalidate><div class="dialog-head"><h3 id="dialogTitle">Thêm khách hàng</h3><button type="button" class="icon-btn" data-close-dialog="customerDialog">✕</button></div><input type="hidden" id="customerId" /><div class="form-grid"><label class="field"><span>Họ tên *</span><input id="nameInput" /></label><label class="field"><span>Số điện thoại *</span><input id="phoneInput" inputmode="tel" autocomplete="tel" /></label><label class="field source-field"><span>Nguồn khách</span><input id="sourceInput" placeholder="CRM, Facebook, data riêng..." /></label><label class="field"><span>Sản phẩm/Nhu cầu</span><input id="productInput" /></label><label class="field"><span>Ngày sinh</span><input id="birthdayInput" type="date" /></label><label class="field"><span>Tỉnh/Thành</span><input id="provinceInput" placeholder="VD: TP.HCM" /></label><label class="field"><span>Khu vực</span><input id="regionInput" placeholder="VD: Quận 1 / Miền Nam" /></label><label class="field"><span>Giới tính</span><select id="genderInput"><option value="unknown">Chưa xác định</option><option value="male">Nam</option><option value="female">Nữ</option></select></label><label class="field"><span>Trạng thái</span><select id="statusInput"><option>Chưa gọi</option><option>Không nghe</option><option>Đang tư vấn</option><option>Đã gửi thông tin</option><option>Hẹn gọi lại</option><option>Tiềm năng</option><option>Không nhu cầu</option><option>Hoàn tất</option></select></label><label class="field"><span>Hẹn gọi lại</span><input id="followupInput" type="datetime-local" /></label><label class="field"><span>Trạng thái Zalo</span><select id="zaloStatusInput"><option value="unknown">Chưa xác minh</option><option value="yes">Có Zalo</option><option value="no">Không có Zalo</option></select></label><div id="dynamicCustomerFields" class="dynamic-customer-fields full-span"></div><label class="field full-span"><span>Ghi chú</span><textarea id="noteInput" rows="4"></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="customerDialog">Hủy</button><button type="submit" class="primary">Lưu khách hàng</button></div></form></dialog>
 
   <dialog id="templateDialog"><form id="templateForm" class="dialog-form" novalidate><div class="dialog-head"><h3>Mẫu tin</h3><button type="button" class="icon-btn" data-close-dialog="templateDialog">✕</button></div><input type="hidden" id="templateId" /><div class="form-grid"><label class="field full-span"><span>Tên mẫu</span><input id="templateNameInput" /></label><label class="field full-span"><span>Nội dung thủ công / SMS</span><textarea id="templateTextInput" rows="6"></textarea></label><label class="field"><span>ZBS Template ID</span><input id="zbsTemplateIdInput" placeholder="ID mẫu đã duyệt trên Zalo" /></label><label class="field"><span>ZBS template_data (JSON)</span><textarea id="zbsTemplateDataInput" rows="5" placeholder='{"customer_name":"{ten}"}'></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="templateDialog">Hủy</button><button type="submit" class="primary">Lưu mẫu</button></div></form></dialog>
 
-  <dialog id="scheduleDialog"><form id="scheduleForm" class="dialog-form" novalidate><div class="dialog-head"><h3>Lên lịch gửi tin</h3><button type="button" class="icon-btn" data-close-dialog="scheduleDialog">✕</button></div><input type="hidden" id="scheduleId" /><div class="form-grid"><label class="field full-span"><span>Khách hàng *</span><select id="scheduleCustomerInput"></select></label><label class="field"><span>Kênh gửi</span><select id="scheduleChannelInput"><option value="auto">Tự chọn Zalo → SMS</option><option value="zalo">Zalo ZBS</option><option value="sms">SMS</option></select></label><label class="field"><span>Thời gian gửi *</span><input id="scheduleTimeInput" type="datetime-local" /></label><label class="field full-span"><span>Mẫu tin *</span><select id="scheduleTemplateInput"></select></label><label class="field full-span"><span>Xem trước</span><textarea id="schedulePreview" rows="5" readonly></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="scheduleDialog">Hủy</button><button type="submit" class="primary">Lưu lịch gửi</button></div></form></dialog>
+  <dialog id="scheduleDialog"><form id="scheduleForm" class="dialog-form" novalidate><div class="dialog-head"><h3>Lên lịch gửi tin</h3><button type="button" class="icon-btn" data-close-dialog="scheduleDialog">✕</button></div><input type="hidden" id="scheduleId" /><div class="form-grid"><label class="field full-span"><span>Khách hàng *</span><select id="scheduleCustomerInput"></select></label><label class="field"><span>Kênh gửi</span><select id="scheduleChannelInput"><option value="sms">SMS bằng SIM Android</option></select></label><label class="field"><span>Thời gian gửi *</span><input id="scheduleTimeInput" type="datetime-local" /></label><label class="field full-span"><span>Mẫu tin *</span><select id="scheduleTemplateInput"></select></label><label class="field full-span"><span>Xem trước</span><textarea id="schedulePreview" rows="5" readonly></textarea></label></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="scheduleDialog">Hủy</button><button type="submit" class="primary">Lưu lịch gửi</button></div></form></dialog>
 
   <button id="aippBackToTop" class="aipp-back-to-top" type="button" aria-label="Lên đầu trang" title="Lên đầu trang">↑</button>
+  <div id="aippCustomerStepNavStatic" class="aipp-customer-step-nav-static" aria-label="Chuyển khách hàng">
+    <button type="button" id="aippCustomerPrevStatic" aria-label="Khách trước" title="Khách trước">◀</button>
+    <button type="button" id="aippCustomerNextStatic" aria-label="Khách tiếp theo" title="Khách tiếp theo">▶</button>
+  </div>
   <div id="toast" class="toast"></div>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260925-15"></script>
+  <script src="pwa-helper.js"></script>
+  <script src="app.js?v=aipp-6-3-0-database-core-safe"></script>
+  <style id="aippStaticCustomerNavStyle">
+    #aippCustomerDetailNav,#aipp622CustomerNav{display:none!important}
+    #aippCustomerStepNavStatic{position:fixed;right:10px;z-index:9992;display:grid;gap:6px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .16s ease,transform .16s ease;transform:translateY(-4px)}
+    #aippCustomerStepNavStatic.show{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+    #aippCustomerStepNavStatic button{width:40px;height:40px;padding:0!important;border-radius:50%;border:1px solid rgba(219,39,119,.30);background:#fff;color:#9d174d;font-size:16px;font-weight:950;display:grid;place-items:center;box-shadow:0 5px 15px rgba(15,23,42,.16)}
+    #aippCustomerStepNavStatic #aippCustomerNextStatic{background:#DB2777;color:#fff;border-color:#DB2777}
+    #aippCustomerStepNavStatic button:disabled{opacity:.34;filter:grayscale(.45);box-shadow:none}
+    #aippCustomerStepNavStatic button:active:not(:disabled){transform:scale(.91)}
+    #customerList .aipp-static-nav-focus{outline:2px solid #ec4899!important;outline-offset:2px;box-shadow:0 8px 22px rgba(236,72,153,.20)!important}
+    @media(min-width:921px){#aippCustomerStepNavStatic{right:14px}#aippCustomerStepNavStatic button{width:44px;height:44px;font-size:18px}}
+  </style>
+  <script id="aippStaticCustomerNavScript">
+  (()=>{
+    'use strict';
+    const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
+    const nav=q('#aippCustomerStepNavStatic'), prev=q('#aippCustomerPrevStatic'), next=q('#aippCustomerNextStatic'), top=q('#aippBackToTop');
+    if(!nav||!prev||!next||!top)return;
+
+    function selectedDetailTab(){
+      const b=q('#detailPanel .v58-customer-tabs [data-v58-tab].active');
+      const tab=b?.dataset?.v58Tab;
+      return ['overview','docs','contact'].includes(tab)?tab:null;
+    }
+    function keepDetailTab(tab){
+      if(!['overview','docs','contact'].includes(tab))return;
+      try{sessionStorage.setItem('aipp-customer-detail-tab',tab)}catch(_){}
+      try{window.aippCustomerDetailTab?.set?.(tab)}catch(_){}
+    }
+    function restoreDetailTab(tab){
+      if(!tab)return; keepDetailTab(tab);
+      const run=()=>{
+        const tabs=q('#detailPanel .v58-customer-tabs'),body=q('#detailPanel .v58-tab-body');
+        if(!tabs||!body)return;
+        tabs.querySelectorAll('[data-v58-tab]').forEach(b=>b.classList.toggle('active',b.dataset.v58Tab===tab));
+        body.querySelectorAll('[data-v58-pane]').forEach(p=>p.classList.toggle('active',p.dataset.v58Pane===tab));
+      };
+      run();requestAnimationFrame(run);setTimeout(run,0);setTimeout(run,40);setTimeout(run,120);
+    }
+
+    function cards(){
+      const box=q('#customerList'); if(!box)return [];
+      const out=[], seen=new Set();
+      box.querySelectorAll('[data-customer-id],[data-dense-id]').forEach(n=>{
+        const id=String(n.dataset.customerId||n.dataset.denseId||'');
+        if(!id||seen.has(id))return;
+        const cs=getComputedStyle(n), r=n.getBoundingClientRect();
+        if(cs.display==='none'||cs.visibility==='hidden'||r.height<2)return;
+        seen.add(id); out.push(n);
+      });
+      return out;
+    }
+    const idOf=n=>String(n?.dataset.customerId||n?.dataset.denseId||'');
+    function detailOnScreen(){
+      const p=q('#detailPanel'); if(!p||!p.children.length)return false;
+      const r=p.getBoundingClientRect();
+      return r.bottom>80 && r.top<innerHeight-80;
+    }
+    function currentIndex(list){
+      if(!list.length)return -1;
+      let sel=''; try{sel=String(selectedCustomerId||'')}catch(_){ }
+      if(detailOnScreen()&&sel){const i=list.findIndex(n=>idOf(n)===sel);if(i>=0)return i}
+      const anchor=Math.min(innerHeight*.47,430); let best=0,dist=Infinity;
+      list.forEach((n,i)=>{const r=n.getBoundingClientRect(), d=Math.abs((r.top+r.bottom)/2-anchor);if(d<dist){dist=d;best=i}});
+      return best;
+    }
+    function visiblePagerButton(dir){
+      const sels=dir>0?['[data-page-next]','[data-v621-next]']:['[data-page-prev]','[data-v621-prev]'];
+      for(const sel of sels){for(const b of qa(sel)){const cs=getComputedStyle(b),r=b.getBoundingClientRect();if(!b.disabled&&cs.display!=='none'&&cs.visibility!=='hidden'&&r.width>0&&r.height>0)return b}}
+      return null;
+    }
+    function mark(card){
+      qa('#customerList .aipp-static-nav-focus').forEach(x=>x.classList.remove('aipp-static-nav-focus'));
+      card?.classList.add('aipp-static-nav-focus');
+      setTimeout(()=>card?.classList.remove('aipp-static-nav-focus'),1200);
+    }
+    function openDetail(id){
+      const tab=selectedDetailTab();
+      if(tab)keepDetailTab(tab);
+      try{selectedCustomerId=id}catch(_){ }
+      try{if(typeof renderDetail==='function')renderDetail();else if(typeof renderAll==='function')renderAll()}catch(_){ }
+      restoreDetailTab(tab);
+      requestAnimationFrame(()=>q('#detailPanel')?.scrollIntoView({behavior:'smooth',block:'start'}));
+    }
+    function moveCard(card,wasDetail){
+      if(!card)return;
+      const id=idOf(card); if(!id)return;
+      try{selectedCustomerId=id}catch(_){ }
+      if(wasDetail){openDetail(id);return}
+      mark(card);card.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    function go(step){
+      const list=cards(); if(!list.length)return;
+      const wasDetail=detailOnScreen(), i=currentIndex(list), ni=i+step;
+      if(ni>=0&&ni<list.length){moveCard(list[ni],wasDetail);setTimeout(update,160);return}
+      const pager=visiblePagerButton(step);
+      if(!pager){try{if(typeof toast==='function')toast(step<0?'Đã ở khách đầu tiên':'Đã ở khách cuối cùng')}catch(_){ }update();return}
+      pager.click();
+      setTimeout(()=>{const n=cards();if(n.length)moveCard(step>0?n[0]:n[n.length-1],wasDetail);update()},220);
+    }
+    function place(){
+      const r=top.getBoundingClientRect();
+      nav.style.top=Math.round(r.bottom+7)+'px';
+      nav.style.right=Math.max(8,Math.round(innerWidth-r.right))+'px';
+    }
+    function update(){
+      place();
+      const view=q('#customersView'), list=cards();
+      const active=!!(view?.classList.contains('active') && top.classList.contains('show') && list.length);
+      nav.classList.toggle('show',active);
+      if(!active)return;
+      const i=currentIndex(list);
+      prev.disabled=(i<=0&&!visiblePagerButton(-1));
+      next.disabled=(i>=list.length-1&&!visiblePagerButton(1));
+    }
+    prev.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();go(-1)});
+    next.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();go(1)});
+    addEventListener('scroll',update,{passive:true});addEventListener('resize',update,{passive:true});
+    const mo=new MutationObserver(()=>requestAnimationFrame(update));
+    mo.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style']});
+    setInterval(update,700);
+    setTimeout(update,80);setTimeout(update,400);
+  })();
+  </script>
   <!-- AIPP V13: compact customer layout + global back-to-top button. -->
 
   <div id="aippNetworkStatus" class="aipp-network-status" role="status">Đang kiểm tra mạng…</div>
@@ -135,7 +293,103 @@
     const el=document.getElementById('aippNetworkStatus');
     const paint=()=>{const on=navigator.onLine;el.textContent=on?'● Online':'● Offline';el.classList.toggle('offline',!on);el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)};
     addEventListener('online',paint); addEventListener('offline',paint); paint();
-    if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=14',{scope:'./'}).catch(err=>console.error('AIPP SW:',err)));}
+    if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.warn));}
+  })();
+  </script>
+
+
+  <dialog id="bulkScheduleDialog"><form id="bulkScheduleForm" class="dialog-form" novalidate><div class="dialog-head"><div><h3>Gửi SMS cho nhiều khách</h3><p class="muted">V5.4.5 · Tạo lịch trực tiếp, không phụ thuộc form submit.</p></div><button type="button" class="icon-btn" data-close-dialog="bulkScheduleDialog">✕</button></div><div class="bulk-search-row"><label class="field"><span>Tìm khách</span><input id="bulkSearchFilter" placeholder="Tên hoặc số điện thoại..." inputmode="search" /></label></div><div class="bulk-filter-grid"><label class="field"><span>Nguồn</span><select id="bulkSourceFilter"><option value="">Tất cả nguồn</option></select></label><label class="field"><span>Trạng thái</span><select id="bulkStatusFilter"><option value="">Tất cả trạng thái</option></select></label><label class="field"><span>Mức độ</span><select id="bulkLevelFilter"><option value="">Tất cả mức độ</option></select></label><label class="field"><span>Giới tính</span><select id="bulkGenderFilter"><option value="">Tất cả giới tính</option><option value="male">Nam</option><option value="female">Nữ</option><option value="unknown">Chưa xác định</option></select></label><label class="field"><span>Zalo</span><select id="bulkZaloFilter"><option value="">Tất cả Zalo</option><option value="yes">Có Zalo</option><option value="no">Không có Zalo</option><option value="unknown">Chưa xác minh</option></select></label><label class="field"><span>Nhà mạng</span><select id="bulkCarrierFilter"><option value="">Tất cả nhà mạng</option><option>Viettel</option><option>VinaPhone</option><option>MobiFone</option><option>Vietnamobile</option><option>Gmobile</option><option>iTel</option><option>Wintel</option><option value="other">Khác</option></select></label></div><div class="bulk-select-head"><div class="bulk-counts"><strong id="bulkSelectedCount">Đã chọn: 0 khách</strong><small id="bulkFoundCount">Tìm thấy: 0 khách</small></div><div><button type="button" class="secondary small" id="bulkSelectAllBtn">Chọn tất cả</button></div></div><div id="bulkCustomerList" class="bulk-customer-list"></div><div class="form-grid bulk-send-config"><label class="field"><span>Thời gian gửi *</span><input id="bulkScheduleTime" type="datetime-local" /></label><label class="field bulk-gap-field" id="bulkGapField" hidden><span>Khoảng cách mỗi SMS</span><div class="bulk-gap-input"><input id="bulkGapMinutes" type="number" min="1" max="1440" step="1" value="3" inputmode="numeric" /><span>phút</span></div></label></div><div class="bulk-template-box"><div class="bulk-template-head"><div><strong>Chọn mẫu tin ngẫu nhiên</strong><small id="bulkTemplateCount">Đã chọn 0 mẫu</small></div><button type="button" class="secondary small" id="bulkTemplateToggleBtn">Chọn tất cả mẫu</button></div><div id="bulkTemplateList" class="bulk-template-list"></div></div><div class="bulk-review"><strong>Xem lại người nhận</strong><p class="muted" id="bulkReviewText">Chưa chọn khách.</p></div><div id="bulkPreviewPanel" class="bulk-preview-panel" hidden><div class="bulk-preview-head"><strong>Xem trước nội dung sẽ gửi</strong><small>Kết quả này được giữ nguyên khi bạn xác nhận.</small></div><div id="bulkPreviewList" class="bulk-preview-list"></div></div><div class="dialog-actions"><button type="button" class="secondary" data-close-dialog="bulkScheduleDialog">Hủy</button><button type="button" class="secondary" id="bulkPreviewBtn">Xem trước</button><button type="button" class="primary" id="bulkCreateBtn" hidden>Xác nhận tạo lịch</button></div></form></dialog>
+
+  <script id="aippV621StaticPagerScript">
+  (()=>{
+    'use strict';
+    const BUILD='6.1.27';
+    let page=1;
+    let size=25;
+    try{const s=Number(localStorage.getItem('aipp-customer-page-size')||localStorage.getItem('aipp-v621-page-size'));if(Number.isFinite(s)&&s>=5&&s<=100)size=Math.round(s)}catch(_){ }
+    const list=()=>document.getElementById('customerList');
+    const marker=()=>document.getElementById('aippStaticBuildMarker');
+    function customerNodes(){
+      const el=list(); if(!el)return [];
+      return [...el.children].filter(n=>n.nodeType===1 && !n.classList.contains('aipp-search-empty') && (n.hasAttribute('data-customer-id') || n.classList.contains('customer-row') || n.classList.contains('customer-card') || n.tagName==='ARTICLE'));
+    }
+    function ensurePager(){
+      const el=list(); if(!el)return null;
+      let p=document.getElementById('aippV621StaticPager');
+      if(!p){p=document.createElement('div');p.id='aippV621StaticPager';p.style.cssText='padding:10px 2px 18px';el.insertAdjacentElement('afterend',p)}
+      return p;
+    }
+    function render(){
+      const el=list(); if(!el)return;
+      // If the core 6.1.20/6.1.21 renderer is active, let it own pagination.
+      const core=document.getElementById('aippV120Pager') || document.getElementById('aippCustomerPager');
+      const pager=ensurePager();
+      if(core){
+        if(pager)pager.style.display='none';
+        return;
+      }
+      const nodes=customerNodes();
+      const total=nodes.length;
+      const pages=Math.max(1,Math.ceil(total/size));
+      if(page>pages)page=pages;if(page<1)page=1;
+      const start=(page-1)*size,end=Math.min(start+size,total);
+      nodes.forEach((n,i)=>{n.style.setProperty('display',(i>=start&&i<end)?'':'none','important')});
+      if(!pager)return;
+      pager.style.display='block';
+      const nums=[]; let a=Math.max(1,page-2),b=Math.min(pages,a+4);a=Math.max(1,b-4);
+      for(let n=a;n<=b;n++)nums.push(`<button type="button" data-v621-page="${n}" style="min-width:35px;min-height:36px;border:0;border-radius:10px;background:${n===page?'#e83282':'#eef2f7'};color:${n===page?'#fff':'#27364b'};font-weight:900;padding:6px 9px">${n}</button>`);
+      pager.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;color:#64748b;font-size:12px;margin:2px 2px 9px"><strong>${total?start+1:0}–${end} / ${total} khách</strong><label style="display:flex;align-items:center;gap:5px">Hiển thị <select id="aippV621PageSize" style="border:1px solid #dce3ea;border-radius:9px;background:#fff;padding:6px 7px;font-weight:800">${[20,25,30,50].includes(size)?'':`<option value="${size}">${size}</option>`}<option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="50">50</option></select></label></div><div style="display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap"><button type="button" data-v621-prev ${page<=1?'disabled':''} style="min-height:36px;border:0;border-radius:10px;background:#eef2f7;font-weight:900;padding:6px 9px">‹ Trước</button>${a>1?'<span>…</span>':''}${nums.join('')}${b<pages?'<span>…</span>':''}<button type="button" data-v621-next ${page>=pages?'disabled':''} style="min-height:36px;border:0;border-radius:10px;background:#eef2f7;font-weight:900;padding:6px 9px">Sau ›</button></div>`;
+      const sel=document.getElementById('aippV621PageSize');if(sel)sel.value=String(size);
+    }
+    document.addEventListener('click',e=>{
+      const n=e.target.closest('[data-v621-page]');if(n){page=Number(n.dataset.v621Page)||1;render();list()?.scrollIntoView({behavior:'smooth',block:'start'});return}
+      if(e.target.closest('[data-v621-prev]')){if(page>1){page--;render();list()?.scrollIntoView({behavior:'smooth',block:'start'})}return}
+      if(e.target.closest('[data-v621-next]')){const total=customerNodes().length,pages=Math.max(1,Math.ceil(total/size));if(page<pages){page++;render();list()?.scrollIntoView({behavior:'smooth',block:'start'})}return}
+    },true);
+    document.addEventListener('change',e=>{
+      if(e.target?.id==='aippV621PageSize'){size=Math.max(5,Math.min(100,Math.round(Number(e.target.value)||25)));try{localStorage.setItem('aipp-customer-page-size',String(size));localStorage.setItem('aipp-v621-page-size',String(size))}catch(_){ }page=1;render()}
+      if(['statusFilter','sourceFilter','carrierFilter','aippRegionFilter'].includes(e.target?.id)){page=1;setTimeout(render,60)}
+    },true);
+    document.getElementById('globalSearch')?.addEventListener('input',()=>{page=1;setTimeout(render,80)},true);
+    const mo=new MutationObserver(()=>setTimeout(render,20));
+    function boot(){const el=list();if(el){mo.observe(el,{childList:true});render()}setTimeout(render,250)}
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+    window.addEventListener('load',()=>setTimeout(render,120),{once:true});
+  })();
+  </script>
+
+
+  <script id="aippV622PaginationSettingsScript">
+  (()=>{
+    'use strict';
+    const KEY='aipp-customer-page-size';
+    const LEGACY_KEY='aipp-v621-page-size';
+    const clamp=v=>Math.max(5,Math.min(100,Math.round(Number(v)||25)));
+    const read=()=>{try{return clamp(localStorage.getItem(KEY)||localStorage.getItem(LEGACY_KEY)||25)}catch(_){return 25}};
+    function updatePresetState(v){
+      document.querySelectorAll('[data-page-size-preset]').forEach(b=>b.classList.toggle('active',Number(b.dataset.pageSizePreset)===v));
+    }
+    function syncField(v){const input=document.getElementById('customerPageSizeSetting');if(input)input.value=String(v);updatePresetState(v)}
+    function store(v){
+      v=clamp(v);
+      try{localStorage.setItem(KEY,String(v));localStorage.setItem(LEGACY_KEY,String(v))}catch(_){ }
+      try{if(typeof state!=='undefined'&&state?.settings){state.settings.customerPageSize=v;typeof save==='function'&&save({render:false})}}catch(_){ }
+      syncField(v);
+      document.dispatchEvent(new CustomEvent('aipp-page-size-changed',{detail:{size:v}}));
+      // Drive whichever live pager currently owns the customer list.
+      const live=document.querySelector('#aippV120PageSize,#aippPageSize,#aippV621PageSize');
+      if(live){
+        if(live.tagName==='SELECT'&&![...live.options].some(o=>Number(o.value)===v)){const o=document.createElement('option');o.value=String(v);o.textContent=String(v);live.prepend(o)}
+        live.value=String(v);
+        live.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+      return v;
+    }
+    const initial=read();syncField(initial);
+    document.addEventListener('change',e=>{if(e.target?.id==='customerPageSizeSetting')store(e.target.value)});
+    document.addEventListener('click',e=>{const b=e.target.closest('[data-page-size-preset]');if(b)store(b.dataset.pageSizePreset)});
+    document.addEventListener('DOMContentLoaded',()=>syncField(read()));
+    addEventListener('pageshow',()=>syncField(read()));
   })();
   </script>
 

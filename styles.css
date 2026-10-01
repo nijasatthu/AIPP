@@ -323,3 +323,297 @@ body.pp-dark input:focus,body.pp-dark select:focus,body.pp-dark textarea:focus,b
 }
 
 /* Privacy V17 stays unchanged visually and functionally. */
+
+
+/* PHUC.PINK V5.2 bulk SMS */
+.automation-actions{display:flex;gap:10px;flex-wrap:wrap}.bulk-filter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.bulk-select-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}.bulk-select-head>div{display:flex;gap:8px;flex-wrap:wrap}.bulk-customer-list{max-height:42vh;overflow:auto;border:1px solid var(--line,#e5e7eb);border-radius:18px;padding:6px;background:var(--panel,#fff)}.bulk-customer-row{display:flex;gap:12px;align-items:flex-start;padding:12px;border-bottom:1px solid var(--line,#eee);cursor:pointer}.bulk-customer-row:last-child{border-bottom:0}.bulk-customer-row input{width:22px;height:22px;flex:0 0 auto;margin-top:2px}.bulk-customer-row span{display:flex;flex-direction:column;gap:4px;min-width:0}.bulk-customer-row small{color:var(--muted,#6b7280);line-height:1.35}.bulk-send-config{margin-top:14px}.bulk-review{padding:12px 14px;border-radius:16px;background:rgba(236,72,153,.07);margin-top:10px}@media(max-width:680px){.bulk-filter-grid{grid-template-columns:1fr}.automation-actions{width:100%}.automation-actions button{flex:1}.bulk-select-head>div{width:100%}.bulk-select-head>div button{flex:1}}
+
+
+/* PHUC.PINK V5.2.1 bulk picker compact + reliable */
+#bulkScheduleDialog .dialog-form{max-height:90vh;overflow:auto}
+.bulk-counts{display:flex;flex-direction:column;gap:2px}.bulk-counts small{color:var(--muted,#64748b);font-weight:700}
+.bulk-customer-list{max-height:30vh!important;padding:3px!important}
+.bulk-customer-row{padding:9px 10px!important;gap:9px!important;align-items:center!important}
+.bulk-customer-row input{width:20px!important;height:20px!important;margin:0!important}
+.bulk-customer-row strong{font-size:15px;line-height:1.2}.bulk-customer-row small{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.bulk-empty{padding:18px;text-align:center;color:var(--muted,#64748b)}
+@media(max-width:680px){
+ .bulk-filter-grid{gap:7px!important}.bulk-filter-grid .field{gap:3px!important}.bulk-filter-grid select{min-height:44px!important;padding-top:8px!important;padding-bottom:8px!important}
+ .bulk-select-head{margin:8px 0!important;gap:7px!important}.bulk-select-head>div{width:auto!important;margin-left:auto}.bulk-select-head>div button{flex:0 0 auto!important;padding:9px 12px!important;font-size:13px!important}
+ .bulk-send-config{margin-top:9px!important}.bulk-review{padding:9px 11px!important;margin-top:7px!important}
+}
+/* V5.2.2 compact bulk selector */
+#bulkScheduleDialog .bulk-filter-grid{gap:8px}
+#bulkScheduleDialog .bulk-select-head{position:sticky;top:0;background:var(--surface,#fff);z-index:2;padding:6px 0}
+#bulkScheduleDialog .bulk-customer-list{max-height:230px;overflow:auto;border:1px solid #e5e7eb;border-radius:12px;padding:4px}
+#bulkScheduleDialog .bulk-customer-row{padding:8px 6px;margin:0;border-bottom:1px solid #f0f1f3}
+#bulkScheduleDialog .bulk-customer-row:last-child{border-bottom:0}
+#bulkScheduleDialog .bulk-customer-row small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72vw}
+
+/* V5.3 single bulk select toggle */
+#bulkSelectAllBtn{min-width:132px}
+
+/* V5.3 staggered bulk SMS */
+#bulkGapField[hidden]{display:none!important}
+.bulk-gap-input{display:flex;align-items:center;gap:8px}.bulk-gap-input input{min-width:0;flex:1}.bulk-gap-input span{font-weight:700;color:var(--muted,#64748b)}
+#bulkGapField small{margin-top:4px;color:var(--muted,#64748b)}
+@media(max-width:680px){#bulkGapField{grid-column:1/-1}.bulk-gap-input input{min-height:44px}}
+
+
+/* V5.4.3 multi-template preview */
+/* V5.4 random template picker + locked preview */
+.bulk-template-box{margin-top:10px;border:1px solid var(--line,#e5e7eb);border-radius:14px;padding:9px}
+.bulk-template-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.bulk-template-head>div{display:flex;flex-direction:column;gap:2px}
+.bulk-template-head small{color:var(--muted,#64748b)}
+.bulk-template-list{max-height:150px;overflow:auto}
+.bulk-template-row{display:flex;gap:9px;padding:8px 4px;border-bottom:1px solid var(--line,#eee);align-items:flex-start}
+.bulk-template-row:last-child{border-bottom:0}
+.bulk-template-row input{width:20px;height:20px;flex:0 0 auto}
+.bulk-template-row span{min-width:0;display:flex;flex-direction:column;gap:2px}
+.bulk-template-row small{color:var(--muted,#64748b);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72vw}
+.bulk-preview-panel{margin-top:10px;border:1px solid var(--line,#e5e7eb);border-radius:14px;padding:9px}
+.bulk-preview-head{display:flex;flex-direction:column;gap:2px;margin-bottom:6px}
+.bulk-preview-head small{color:var(--muted,#64748b)}
+.bulk-preview-list{max-height:260px;overflow:auto}
+.bulk-preview-row{padding:9px 4px;border-bottom:1px solid var(--line,#eee)}
+.bulk-preview-row:last-child{border-bottom:0}
+.bulk-preview-row small{display:block;color:var(--muted,#64748b);margin-top:2px}
+.bulk-preview-row p{margin:5px 0 0;white-space:pre-wrap;font-size:13px;line-height:1.35}
+.bulk-template-head{align-items:flex-start}
+.bulk-template-head button{flex:0 0 auto}
+.bulk-preview-list{max-height:220px}
+
+/* AIPP V5.4.4 - bulk dialog mobile scroll + sticky actions */
+#bulkScheduleDialog {
+  width: min(720px, calc(100vw - 20px));
+  max-width: 720px;
+  max-height: 92dvh;
+  padding: 0;
+  overflow: hidden;
+}
+#bulkScheduleDialog .dialog-form {
+  box-sizing: border-box;
+  max-height: 92dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0;
+}
+#bulkScheduleDialog .dialog-head {
+  position: sticky;
+  top: 0;
+  z-index: 8;
+  background: var(--surface, #fff);
+}
+#bulkScheduleDialog .dialog-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin: 14px -18px -18px;
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+  background: var(--surface, #fff);
+  border-top: 1px solid rgba(120,120,140,.18);
+  box-shadow: 0 -8px 20px rgba(20,20,40,.08);
+}
+#bulkScheduleDialog #bulkPreviewBtn,
+#bulkScheduleDialog #bulkCreateBtn { min-height: 48px; font-weight: 800; }
+@media (max-width: 600px) {
+  #bulkScheduleDialog { width: calc(100vw - 16px); max-height: 94dvh; }
+  #bulkScheduleDialog .dialog-form { max-height: 94dvh; }
+  #bulkScheduleDialog .dialog-actions { margin-left: -14px; margin-right: -14px; margin-bottom: -14px; padding-left: 14px; padding-right: 14px; }
+}
+
+/* ===== AIPP V5.5 ALL-IN-ONE TOOLS ===== */
+.aipp-tools-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.aipp-tool-card{padding:16px}.aipp-tool-card.wide{grid-column:1/-1}.aipp-tool-card h3{margin:0 0 6px}.aipp-tool-card .tool-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.aipp-tool-card input,.aipp-tool-card select,.aipp-tool-card textarea{width:100%;box-sizing:border-box}.aipp-filter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.aipp-result-list{max-height:330px;overflow:auto;margin-top:10px;border-top:1px solid var(--border,#ddd)}.aipp-result-item{display:flex;justify-content:space-between;gap:10px;padding:10px 2px;border-bottom:1px solid var(--border,#eee);align-items:center}.aipp-result-item small{display:block;opacity:.72;margin-top:3px}.aipp-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}.aipp-tag{font-size:11px;padding:3px 7px;border-radius:999px;background:rgba(127,127,127,.14)}.aipp-tool-tabs{display:flex;gap:7px;overflow:auto;padding-bottom:8px;margin-bottom:12px}.aipp-tool-tabs button{white-space:nowrap}.aipp-tool-tabs button.active{font-weight:700}.aipp-tool-section{display:none}.aipp-tool-section.active{display:grid}.aipp-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.aipp-summary>div{padding:10px;border-radius:12px;background:rgba(127,127,127,.09);text-align:center}.aipp-summary strong{display:block;font-size:20px}.aipp-list-name{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border,#eee)}
+@media(max-width:760px){.aipp-tools-grid,.aipp-filter-grid{grid-template-columns:1fr}.aipp-tool-card.wide{grid-column:auto}.aipp-summary{grid-template-columns:repeat(2,1fr)}#toolsView{padding-bottom:110px}}
+
+/* ===== AIPP V5.8 - visibly different mobile layout ===== */
+.v58-settings-shell{max-width:760px;margin:0 auto}.v58-settings-hero{display:flex;justify-content:space-between;align-items:center;padding:20px;border-radius:24px;background:linear-gradient(135deg,var(--primary),color-mix(in srgb,var(--primary) 55%,#7c3aed));color:#fff;margin-bottom:14px;box-shadow:0 14px 32px rgba(30,41,59,.14)}.v58-settings-hero div{display:flex;flex-direction:column;gap:4px}.v58-settings-hero b{font-size:24px}.v58-settings-hero span{opacity:.92}.v58-settings-hero>span{font-size:34px}.v58-settings-menu{display:grid;gap:10px}.v58-settings-menu>button{display:grid;grid-template-columns:48px 1fr 20px;align-items:center;text-align:left;gap:12px;width:100%;padding:15px;border:1px solid var(--line,#e5e7eb);border-radius:20px;background:var(--panel,#fff);color:inherit;box-shadow:0 6px 18px rgba(30,41,59,.05)}.v58-settings-menu i{font-style:normal;width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:color-mix(in srgb,var(--primary) 11%,transparent);font-size:24px}.v58-settings-menu span{display:flex;flex-direction:column;gap:3px}.v58-settings-menu b{font-size:16px}.v58-settings-menu small{color:var(--muted,#64748b);font-weight:500}.v58-settings-menu em{font-size:28px;font-style:normal;color:var(--muted,#94a3b8)}.v58-settings-page{display:none}.v58-settings-page.active{display:block}.v58-page-head{position:sticky;top:0;z-index:15;display:flex;align-items:center;gap:12px;padding:10px 4px 14px;background:var(--bg,#f6f7fb)}.v58-page-head>button{width:44px;height:44px;border:0;border-radius:14px;background:var(--panel,#fff);font-size:30px;color:inherit}.v58-page-head>div{display:flex;flex-direction:column}.v58-page-head b{font-size:21px}.v58-page-head small{color:var(--muted,#64748b)}.v58-page-body{display:grid;gap:12px}.v58-page-body>.panel{margin:0!important;box-shadow:none!important;border-radius:20px!important}.v58-guide-intro{display:flex;flex-direction:column;gap:4px;padding:16px;border-radius:18px;background:color-mix(in srgb,var(--primary) 10%,var(--panel,#fff));margin-bottom:10px}.v58-guide-card{background:var(--panel,#fff);border:1px solid var(--line,#e5e7eb);border-radius:18px;margin-bottom:10px;overflow:hidden}.v58-guide-card summary{list-style:none;display:grid;grid-template-columns:44px 1fr 22px;gap:10px;align-items:center;padding:14px;cursor:pointer}.v58-guide-card summary::-webkit-details-marker{display:none}.v58-guide-card summary i{font-style:normal;font-size:25px}.v58-guide-card summary span{display:flex;flex-direction:column;gap:3px}.v58-guide-card summary small{color:var(--muted,#64748b);line-height:1.35}.v58-guide-card summary em{font-style:normal}.v58-guide-content{padding:0 14px 15px}.v58-guide-shot{max-width:320px;margin:4px auto 12px;border:7px solid #1e293b;border-radius:24px;overflow:hidden;background:#f8fafc;box-shadow:0 12px 25px rgba(15,23,42,.15)}.v58-shot-top{padding:8px 12px;background:var(--primary);color:#fff;font-weight:800}.v58-shot-card{margin:12px;padding:12px;border-radius:14px;background:#fff;display:flex;flex-direction:column;gap:8px;box-shadow:0 4px 14px rgba(15,23,42,.08)}.v58-shot-card span{color:#64748b}.v58-shot-card button{border:0;border-radius:11px;padding:9px;background:var(--primary);color:#fff;font-weight:800}.v58-shot-nav{text-align:center;padding:9px;background:#111827;color:#fff}.v58-customer-tabs{position:sticky;top:0;z-index:11;display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:5px;margin:10px 0 12px;border-radius:16px;background:color-mix(in srgb,var(--primary) 8%,#eef2f7)}.v58-customer-tabs button{border:0;border-radius:12px;padding:11px 5px;background:transparent;color:var(--muted,#64748b);font-weight:800}.v58-customer-tabs button.active{background:var(--panel,#fff);color:var(--primary);box-shadow:0 3px 10px rgba(15,23,42,.09)}.v58-tab-pane{display:none}.v58-tab-pane.active{display:block}.v58-tab-pane .info-grid,.v58-tab-pane .pp-profile-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.v58-tab-pane .detail-card{min-height:0!important;padding:12px!important;border-radius:15px!important}.v58-tab-pane .detail-card span{font-size:12px}.v58-tab-pane .detail-card strong{font-size:15px}.v58-tab-pane .pp-checklist{margin-top:0!important;border-radius:18px!important}.v58-tab-pane .aipp-v561-block{margin-top:0!important}.v58-tab-pane .pp-timeline{margin-top:12px!important}.v58-empty{padding:24px;text-align:center;color:var(--muted,#64748b)}
+@media(max-width:560px){#detailPanel{padding:12px!important}.customer-summary{padding:2px 2px 8px!important}.customer-summary h3{font-size:24px!important}.customer-head-actions{gap:5px!important}.customer-head-actions button span{display:none}.customer-head-actions button{width:42px;height:42px;padding:0!important}.pp-level-select{margin:5px 0 8px!important}.v58-tab-pane .quick-status{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:6px!important}.v58-tab-pane .quick-status button{padding:9px 4px!important;font-size:12px!important;white-space:normal!important}.v58-tab-pane .secondary-actions{grid-template-columns:1fr!important}.v58-settings-menu>button{min-height:78px}.v58-page-body .settings-list{max-height:none}}
+
+/* ===== AIPP V5.8.4 compact layout + settings ===== */
+/* Dashboard: make an odd fifth card look intentional on phone. */
+@media(max-width:620px){
+  #statsGrid.aipp-five-stats .stat[data-dash-item="due"]{grid-column:1/-1;min-height:76px!important}
+  #statsGrid .stat{min-height:82px!important;padding:12px 14px!important}
+  #statsGrid .stat span{font-size:13px!important}
+  #statsGrid .stat strong{font-size:25px!important}
+}
+/* Dashboard settings: compact two-column switches. */
+#aippDashboardToggleList{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px!important;margin-top:12px}
+#aippDashboardToggleList .setting-row{min-height:54px!important;margin:0!important;padding:9px 10px!important;border:1px solid var(--line,#e5e7eb)!important;border-radius:14px!important;background:color-mix(in srgb,var(--primary) 4%,var(--panel,#fff));display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}
+#aippDashboardToggleList .setting-row span{font-size:13px;line-height:1.25;font-weight:650}
+#aippDashboardToggleList .setting-row input{width:20px!important;height:20px!important;flex:0 0 auto}
+@media(max-width:380px){#aippDashboardToggleList{grid-template-columns:1fr}}
+/* Sticky customer: compact identity card, no large full-width action button. */
+#aippFixedCustomer.aipp-fixed-customer{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important;padding:9px 10px 9px 13px!important;min-height:66px!important;border-radius:18px!important}
+#aippFixedCustomer .aipp-fixed-info{min-width:0!important}
+#aippFixedCustomer .aipp-fixed-info b{display:block!important;font-size:16px!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#aippFixedCustomer .aipp-fixed-info span{display:block!important;margin-top:3px!important;font-size:12px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#aippFixedCustomer .aipp-fixed-actions{display:flex!important;width:auto!important;gap:5px!important;align-items:center!important}
+#aippFixedCustomer .aipp-fixed-actions button{width:38px!important;height:38px!important;min-width:38px!important;padding:0!important;border-radius:12px!important;font-size:0!important;display:grid!important;place-items:center!important}
+#aippFixedCustomer .aipp-fixed-actions button::first-letter{font-size:16px}
+#aippFixedCustomer .aipp-fixed-actions button span{display:none!important}
+#aippFixedCustomer .aipp-fixed-actions .aipp-fixed-detail{font-size:0!important}
+#aippFixedCustomer .aipp-fixed-actions .aipp-fixed-detail::after{content:'›';font-size:27px!important;line-height:1}
+@media(max-width:620px){#aippFixedCustomer.aipp-fixed-customer{width:calc(100% - 24px)!important;top:calc(env(safe-area-inset-top) + 8px)!important}.aipp-fixed-actions button[data-schedule-customer],.aipp-fixed-actions button[data-delete]{display:none!important}}
+/* Customer overview: reduce wasted height in Zalo card. */
+.v58-tab-pane .detail-card .row-inline{gap:6px!important}
+@media(max-width:620px){.v58-tab-pane .detail-card{padding:10px 11px!important}.v58-tab-pane .detail-card .row-inline button{padding:7px 10px!important;min-height:36px!important}}
+
+/* AIPP developer identity */
+.developer-info-card{overflow:hidden}.developer-app-head{display:flex;align-items:center;gap:13px;padding-bottom:12px;border-bottom:1px solid var(--line)}.developer-app-head h3{margin:0 0 4px;font-size:18px}.developer-app-head p{margin:0}.developer-app-logo{width:64px;height:64px;border-radius:18px;object-fit:cover;box-shadow:0 7px 18px rgba(219,39,119,.22)}.developer-note{margin-top:4px;padding:12px;border-radius:13px;background:rgba(236,72,153,.08);border:1px solid rgba(236,72,153,.18);line-height:1.5}.developer-note span{font-size:12px;color:var(--muted)}
+
+
+/* ===== AIPP: Gender, Zalo selection & bulk filters ===== */
+.mini-pill.gender-male,.gender-text.gender-male{background:#dbeafe;color:#1d4ed8}
+.mini-pill.gender-female,.gender-text.gender-female{background:#fce7f3;color:#be185d}
+.mini-pill.gender-unknown,.gender-text.gender-unknown{background:#f1f5f9;color:#64748b}
+.gender-text{display:inline-block!important;padding:5px 9px;border-radius:10px}
+.customer-row.gender-male{border-left:4px solid #60a5fa!important}
+.customer-row.gender-female{border-left:4px solid #f472b6!important}
+.customer-row.gender-unknown{border-left:4px solid #cbd5e1!important}
+.list-item.gender-male{border-left:4px solid #60a5fa}.list-item.gender-female{border-left:4px solid #f472b6}.list-item.gender-unknown{border-left:4px solid #cbd5e1}
+.zalo-choice{min-width:48px;transition:.15s ease}
+.zalo-choice.active{box-shadow:0 0 0 3px rgba(15,23,42,.10);transform:translateY(-1px);font-weight:900}
+.zalo-choice.active.yes{background:#16a34a!important;color:#fff!important;border-color:#15803d!important}
+.zalo-choice.active.no{background:#ef4444!important;color:#fff!important;border-color:#dc2626!important}
+.zalo-choice.active.unknown{background:#f59e0b!important;color:#fff!important;border-color:#d97706!important}
+.bulk-search-row{margin-bottom:8px}.bulk-search-row .field{width:100%}
+.bulk-filter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:680px){.bulk-filter-grid{grid-template-columns:1fr 1fr!important}.bulk-filter-grid .field:first-child{grid-column:auto}.bulk-search-row{margin-bottom:6px}}
+
+
+/* ===== AIPP UI + CARRIER UPGRADE ===== */
+body[data-font-size="small"]{font-size:14px}
+body[data-font-size="normal"]{font-size:16px}
+body[data-font-size="large"]{font-size:18px}
+body[data-font-size="large"] .meta,body[data-font-size="large"] .muted,body[data-font-size="large"] .field span{font-size:.82em}
+body[data-density="spacious"] .customer-row,body[data-density="spacious"] .list-item,body[data-density="spacious"] .template-row,body[data-density="spacious"] .schedule-row{padding:16px 14px}
+body[data-density="spacious"] .customer-list{gap:11px}
+.carrier-pill{background:#e0f2fe;color:#075985}
+body.pp-dark .carrier-pill{background:#12334a!important;color:#bae6fd!important}
+#carrierFilter{min-width:155px}
+.setting-selects{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.v58-settings-menu>button:active{transform:scale(.99)}
+.v58-page-body>.panel>h3{font-size:17px}
+@media(max-width:560px){
+  .filters{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important}
+  .filters #nextCustomerBtn{grid-column:1/-1}
+  #carrierFilter{min-width:0}
+  .setting-selects{grid-template-columns:1fr!important}
+  .v58-settings-shell{padding-bottom:90px}
+  .v58-settings-hero{padding:16px;border-radius:20px}
+  .v58-settings-hero b{font-size:21px}
+  .v58-settings-menu>button{padding:13px;min-height:72px;border-radius:17px}
+  .v58-settings-menu i{width:44px;height:44px}
+}
+
+/* AIPP Batch 1 */
+.b1-detail-tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.b1-detail-tools button{flex:1;min-width:145px}.b1-loan-result{display:grid;gap:8px;margin:14px 0}.b1-loan-result>div{display:flex;justify-content:space-between;gap:12px;padding:12px;border:1px solid var(--line,#e5e7eb);border-radius:12px}.b1-loan-result strong{color:var(--primary,#db2777);text-align:right}.b1-disclaimer{font-size:12px}.b1-qr-wrap{text-align:center}.b1-qr-wrap img{display:block;width:min(280px,80vw);aspect-ratio:1;margin:8px auto 12px;background:#fff;border-radius:16px;padding:10px}.b1-qr-wrap code{display:block;word-break:break-all;font-size:11px}.b1-schema{padding:12px 0;border-bottom:1px solid var(--line,#e5e7eb)}.b1-schema:last-child{border-bottom:0}.b1-schema-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.b1-schema-head>div{display:flex;gap:6px}.b1-schema-fields{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.b1-schema-fields>span{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line,#e5e7eb);border-radius:999px;padding:6px 9px;font-size:13px}.b1-schema-fields button{border:0;background:transparent;color:#b91c1c;padding:0;font-size:16px}.b1-product-fields{margin-top:6px;padding-top:12px;border-top:1px dashed var(--line,#e5e7eb)}.b1-product-detail{margin-top:10px}.b1-check-list{display:grid;gap:8px;margin:12px 0}.b1-check{display:flex;align-items:flex-start;gap:9px;padding:11px;border-radius:12px;border:1px solid var(--line,#e5e7eb)}.b1-check.ok{background:rgba(34,197,94,.08)}.b1-check.warn{background:rgba(245,158,11,.10)}.b1-check.bad{background:rgba(239,68,68,.10)}@media(max-width:520px){.b1-detail-tools{display:grid;grid-template-columns:1fr 1fr}.b1-detail-tools button{min-width:0;padding:10px 8px;font-size:13px}}
+/* AIPP V6 CLEAN workflow compact layout */
+.quick-status{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}.quick-status button{min-width:0!important;padding:11px 6px!important;font-size:.92rem!important;white-space:nowrap}.quick-status .v6-complete{grid-column:1/-1!important;background:linear-gradient(135deg,#ec4899,#db2777)!important;color:#fff!important;border-color:#db2777!important;font-weight:800!important;font-size:1.05rem!important;box-shadow:0 7px 16px rgba(219,39,119,.18)}
+.v6-zalo-card{grid-column:1/-1!important;padding:12px 14px!important}.v6-zalo-line{display:flex;align-items:center;justify-content:space-between;gap:8px}.v6-zalo-line>strong{font-size:.92rem!important;white-space:nowrap}.v6-zalo-line>div{display:flex;gap:5px}.v6-zalo-line button{padding:7px 11px!important;min-width:42px!important;font-size:.86rem!important}.zalo-choice.active.yes{background:#dcfce7!important;color:#15803d!important;border-color:#86efac!important}.zalo-choice.active.no{background:#fee2e2!important;color:#b91c1c!important;border-color:#fca5a5!important}.zalo-choice.active.unknown{background:#fef3c7!important;color:#b45309!important;border-color:#fbbf24!important}
+.v6-loan-result{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0;padding:13px 14px;border:1px solid;border-radius:18px}.v6-loan-result>div:first-child{display:grid;gap:3px}.v6-loan-result small,.v6-loan-result span{color:#64748b}.v6-loan-result strong{font-size:1.05rem}.v6-loan-result.approved{background:#ecfdf5;border-color:#86efac}.v6-loan-result.reject{background:#fff1f2;border-color:#fecaca}.v6-loan-result.sales{background:#fff7ed;border-color:#fed7aa}.v6-result-actions{display:flex;gap:6px;flex-direction:column}.v6-result-actions button{padding:7px 12px!important}.v6-approved-customer .customer-summary{border-color:#4ade80!important;box-shadow:0 0 0 1px #4ade80 inset!important}
+.pp-report-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.pp-report-grid button{appearance:none;text-align:left;border:1px solid #e2e8f0;background:#fff;border-radius:16px;padding:13px;display:grid;gap:6px;color:inherit}.pp-report-grid button span{color:#64748b;font-size:.86rem}.pp-report-grid button strong{font-size:1.3rem;overflow-wrap:anywhere}.pp-report-grid .v6-money strong{font-size:1.05rem}.v6-report-list{display:grid;gap:8px;max-height:58vh;overflow:auto}.v6-report-row{width:100%;border:1px solid #e2e8f0;background:#fff;border-radius:14px;padding:12px;display:flex;justify-content:space-between;align-items:center;text-align:left;gap:12px}.v6-report-row span{display:grid;gap:2px}.v6-report-row small{color:#64748b}.v6-report-row>b{white-space:nowrap;color:#0f172a}
+@media(max-width:430px){.quick-status button{font-size:.82rem!important}.v6-zalo-line>strong{font-size:.82rem!important}.v6-zalo-line button{padding:6px 9px!important}.v6-loan-result{padding:11px}.pp-report-grid button{padding:11px}}
+
+/* AIPP V6.0.1 */
+.pp-section-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pp-section-title>span{margin-right:auto}.v601-reset-log{font-size:12px!important;padding:7px 10px!important;min-height:34px!important;color:#a61b35!important;background:#fff1f3!important;border-color:#ffd3dc!important}
+#v601FollowupDialog .form-grid{grid-template-columns:1fr 1fr}#v601FollowupDialog input[type=date],#v601FollowupDialog input[type=time]{min-height:52px;font-size:16px}
+@media(max-width:520px){#v601FollowupDialog .form-grid{grid-template-columns:1fr 1fr}}
+/* AIPP V6.0.1 appointment/report/log fixes */
+.pp-log-head{display:flex!important;align-items:center;justify-content:space-between;gap:10px}.pp-log-head>span{display:flex;align-items:center;gap:7px}.pp-log-head b{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:#fce7f3;color:#be185d;font-size:12px}.pp-reset-log{padding:7px 10px!important;font-size:12px!important;color:#b91c1c!important;background:#fff1f2!important;border-color:#fecdd3!important}
+#v6FollowupDialog .form-grid{grid-template-columns:1fr 1fr!important}#v6FollowupDialog input{font-size:16px!important}@media(max-width:430px){#v6FollowupDialog .form-grid{grid-template-columns:1fr!important}.pp-reset-log{padding:6px 8px!important;font-size:11px!important}}
+#ppReportRange{min-width:145px}
+
+/* ===== AIPP HOME V2 - visual/layout only ===== */
+#aippHomeDummy{display:none}
+.aipp-home-v2{max-width:1180px;margin:0 auto;padding-bottom:24px}
+.aipp-home-hero{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;padding:18px 20px;border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,var(--aipp-accent,var(--primary)) 13%,#fff),#fff 66%);border:1px solid color-mix(in srgb,var(--aipp-accent,var(--primary)) 22%,#e2e8f0);box-shadow:0 10px 28px rgba(15,23,42,.055)}
+.aipp-home-brand{display:flex;align-items:center;gap:13px;min-width:0}.aipp-home-mark{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,var(--aipp-accent,var(--primary)),color-mix(in srgb,var(--aipp-accent,var(--primary)) 72%,#6d1038));color:#fff;font-weight:950;font-size:22px;box-shadow:0 8px 18px color-mix(in srgb,var(--aipp-accent,var(--primary)) 22%,transparent)}
+.aipp-home-brand small,.aipp-eyebrow{font-size:10px;font-weight:900;letter-spacing:.09em;color:var(--aipp-accent,var(--primary))}.aipp-home-brand h3{margin:2px 0 2px;font-size:21px}.aipp-home-brand p{margin:0;color:var(--muted);font-size:12px}.aipp-home-add{border:0;border-radius:15px;background:var(--aipp-accent,var(--primary));color:#fff;font-weight:850;padding:11px 14px;white-space:nowrap;box-shadow:0 7px 16px color-mix(in srgb,var(--aipp-accent,var(--primary)) 18%,transparent)}
+.aipp-home-v2 #statsGrid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:12px}.aipp-home-v2 #statsGrid .stat{position:relative;overflow:hidden;min-height:96px!important;padding:14px!important;border-radius:20px!important;box-shadow:none!important}.aipp-home-v2 #statsGrid .stat:before{display:block;font-size:20px;margin-bottom:7px}.aipp-home-v2 #statsGrid .stat:nth-child(1):before{content:'👥'}.aipp-home-v2 #statsGrid .stat:nth-child(2):before{content:'📌'}.aipp-home-v2 #statsGrid .stat:nth-child(3):before{content:'🔥'}.aipp-home-v2 #statsGrid .stat:nth-child(4):before{content:'💬'}.aipp-home-v2 #statsGrid .stat:nth-child(5):before{content:'📨'}.aipp-home-v2 #statsGrid .stat span{font-size:11px!important}.aipp-home-v2 #statsGrid .stat strong{font-size:25px!important;margin-top:2px!important}.aipp-home-v2 #statsGrid .stat:nth-child(2){border-color:#f9c9da}.aipp-home-v2 #statsGrid .stat:nth-child(3){border-color:#fed7aa}.aipp-home-focus{margin-bottom:12px;border-radius:22px!important}.aipp-home-focus .panel-head{margin-bottom:12px}.aipp-home-focus .panel-head h3{margin-top:2px}.aipp-home-secondary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.aipp-home-secondary>.panel{margin:0!important;border-radius:22px!important;min-width:0}.aipp-home-v2 .list-item{border:0!important;background:#f8fafc!important;border-radius:15px!important;padding:11px 12px!important}.aipp-home-v2 .list-item+.list-item{margin-top:2px}.aipp-home-v2 #ppReport{margin-top:12px!important;border-radius:22px!important}.aipp-home-v2 #ppReport .panel-head{align-items:center}.aipp-home-v2 #ppReportRange{border-radius:13px!important;min-width:132px!important}.aipp-home-v2 .pp-report-grid button{box-shadow:none!important}.aipp-home-v2 .badge{min-width:28px;text-align:center;font-weight:850}
+body.pp-dark .aipp-home-hero{background:linear-gradient(135deg,color-mix(in srgb,var(--aipp-accent,var(--primary)) 22%,#121b2b),#121b2b 70%);border-color:#26354a}.pp-dark .aipp-home-v2 .list-item{background:#18243a!important}
+@media(max-width:680px){
+ .aipp-home-v2{padding:0 0 12px}.aipp-home-hero{padding:13px 14px;margin-bottom:10px;border-radius:20px}.aipp-home-mark{width:42px;height:42px;flex-basis:42px;border-radius:14px}.aipp-home-brand h3{font-size:18px}.aipp-home-brand p{display:none}.aipp-home-add{width:44px;height:44px;padding:0;font-size:22px}.aipp-home-add span{display:none}
+ .aipp-home-v2 #statsGrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-bottom:10px!important}.aipp-home-v2 #statsGrid .stat{min-height:82px!important;padding:10px 12px!important;border-radius:17px!important}.aipp-home-v2 #statsGrid .stat:before{font-size:17px;margin-bottom:3px}.aipp-home-v2 #statsGrid .stat strong{font-size:23px!important}.aipp-home-v2 #statsGrid .stat:nth-child(1){grid-column:1/-1;display:grid!important;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center}.aipp-home-v2 #statsGrid .stat:nth-child(1):before{grid-row:1/-1;font-size:27px}.aipp-home-v2 #statsGrid .stat:nth-child(1) span{align-self:end}.aipp-home-v2 #statsGrid .stat:nth-child(1) strong{align-self:start;margin:0!important}.aipp-home-v2 #statsGrid .stat:nth-child(5){grid-column:1/-1}
+ .aipp-home-secondary{grid-template-columns:1fr;gap:10px}.aipp-home-focus,.aipp-home-secondary>.panel,.aipp-home-v2 #ppReport{border-radius:18px!important;padding:13px!important}.aipp-home-v2 .panel-head h3{font-size:16px}.aipp-home-v2 #ppReport .panel-head{gap:8px}.aipp-home-v2 #ppReportRange{min-width:118px!important;padding:8px 9px!important}.aipp-home-v2 .pp-report-grid{gap:7px!important}.aipp-home-v2 .pp-report-grid button{border-radius:14px!important;padding:10px!important}
+}
+
+/* ===== AIPP HOME V2.1 - approved compact overview ===== */
+/* Hide shared search/add actions only while Overview is active. They remain available to other views. */
+body.aipp-dashboard-active .top-actions{display:none!important}
+/* Home now uses only the four approved KPIs. */
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(5){display:none!important}
+body.aipp-dashboard-active .topbar{padding-bottom:10px!important}
+body.aipp-dashboard-active .topbar h2{margin-bottom:2px!important}
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;margin-bottom:11px!important}
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(1){grid-column:1/-1!important}
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(4){grid-column:1/-1!important}
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat{min-height:76px!important;padding:11px 13px!important;border-radius:18px!important}
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(1),
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(4){display:grid!important;grid-template-columns:auto 1fr auto!important;grid-template-rows:1fr!important;align-items:center!important;column-gap:10px!important}
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(1):before,
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(4):before{grid-row:auto!important;font-size:24px!important;margin:0!important}
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(1) span,
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(4) span{align-self:center!important;font-size:13px!important}
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(1) strong,
+body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(4) strong{align-self:center!important;margin:0!important;font-size:25px!important}
+body.aipp-dashboard-active .aipp-home-focus{margin-top:0!important}
+@media(max-width:680px){
+ body.aipp-dashboard-active .main{padding-top:0!important}
+ body.aipp-dashboard-active .topbar{margin-bottom:8px!important}
+ body.aipp-dashboard-active .topbar h2{font-size:28px!important;line-height:1.08!important}
+ body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(2),
+ body.aipp-dashboard-active .aipp-home-v2 #statsGrid .stat:nth-child(3){min-height:108px!important}
+}
+
+/* ===== AIPP V6.0.6 - CUSTOMER DETAIL HEADER + OVERVIEW COMPACT ===== */
+.v606-detail .v606-summary{padding:10px 10px 8px!important;margin:0!important;border-radius:18px!important;background:#fff!important}
+.v606-detail .v606-summary h3{margin:0 0 2px!important;font-size:22px!important;line-height:1.15!important}
+.v606-detail .v606-summary .phone{font-size:15px!important;color:#64748b!important}
+.v606-identity-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:7px}
+.v606-identity-meta .status-pill,.v606-identity-meta .mini-pill{font-size:11px!important;padding:5px 8px!important}
+.v606-queue.approved{background:#dcfce7!important;color:#166534!important}.v606-queue.reject{background:#fee2e2!important;color:#991b1b!important}.v606-queue.sales{background:#ffedd5!important;color:#9a3412!important}
+.v606-detail .v606-overflow-actions{display:flex!important;gap:5px!important;max-width:none!important}
+.v606-detail .v606-overflow-actions button{width:38px!important;height:38px!important;min-height:38px!important;padding:0!important;font-size:0!important;border-radius:12px!important}
+.v606-detail .v606-overflow-actions button::first-letter{font-size:16px}.v606-detail .v606-overflow-actions button span{display:none!important}
+.v606-detail .v606-main-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important;margin:8px 0 9px!important;width:100%!important}
+.v606-detail .v606-main-actions .action-btn{height:56px!important;min-height:56px!important;padding:6px 2px!important;border-radius:15px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;font-size:12px!important;font-weight:800!important;border:0!important;text-decoration:none!important}
+.v606-detail .v606-main-actions .action-btn>span:first-child{font-size:20px!important;line-height:1!important}
+.v606-detail .action-followup{background:#fff1f2!important;color:#be185d!important}
+.v606-detail .v58-customer-tabs{position:sticky!important;top:0!important;margin:0 0 9px!important;padding:4px!important;border-radius:14px!important}
+.v606-detail .v58-customer-tabs button{padding:9px 4px!important;font-size:13px!important}
+.v606-detail .quick-status-wrap{margin:0 0 9px!important}.v606-detail .quick-status-wrap .section-label{font-size:13px!important;margin-bottom:6px!important}
+.v606-detail .quick-status{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;overflow:visible!important}
+.v606-detail .quick-status button{min-height:36px!important;padding:7px 3px!important;font-size:11px!important;line-height:1.15!important;white-space:normal!important;border-radius:11px!important}
+.v606-detail .quick-status .v6-complete{grid-column:1/-1!important;min-height:39px!important;font-size:12px!important}
+.v606-detail .v606-result{margin:8px 0!important;padding:10px 11px!important;border-radius:14px!important}.v606-detail .v606-result strong{font-size:14px!important}.v606-detail .v606-result small,.v606-detail .v606-result span{font-size:11px!important}.v606-detail .v606-result .v6-result-actions{flex-direction:row!important}.v606-detail .v606-result button{padding:6px 9px!important;font-size:11px!important}
+.v606-detail .v606-info-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;margin-top:7px!important}
+.v606-detail .v606-info-grid .detail-card{padding:9px 10px!important;border-radius:13px!important;min-height:58px!important}.v606-detail .v606-info-grid .detail-card span{font-size:10px!important}.v606-detail .v606-info-grid .detail-card strong{font-size:13px!important}
+.v606-detail .v6-zalo-line{gap:5px!important}.v606-detail .v6-zalo-line>div{display:flex!important;gap:3px!important}.v606-detail .v6-zalo-line button{min-height:28px!important;padding:4px 7px!important;font-size:10px!important}
+.v606-detail .v606-note{margin-top:7px!important;padding:10px 11px!important;border-radius:13px!important;font-size:13px!important}.v606-note-label{display:block;color:#64748b;font-weight:800;margin-bottom:4px}
+.v606-detail .b1-detail-tools{margin:7px 0!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}.v606-detail .b1-detail-tools button{padding:8px 5px!important;font-size:11px!important}
+@media(max-width:430px){.v606-detail{padding:9px!important}.v606-detail .v606-summary h3{font-size:20px!important}.v606-detail .v606-main-actions .action-btn{height:52px!important;min-height:52px!important}.v606-detail .v606-main-actions .action-btn>span:first-child{font-size:18px!important}}
+
+
+/* AIPP V6.1.22 - customer pagination settings */
+#customerPaginationSettings .customer-page-size-input-row{display:flex;align-items:center;gap:10px}
+#customerPaginationSettings .customer-page-size-input-row input{width:110px;max-width:42%;font-size:18px;font-weight:800;text-align:center}
+#customerPaginationSettings .customer-page-size-input-row>span{color:var(--muted,#64748b);font-weight:700}
+#customerPaginationSettings .customer-page-size-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#customerPaginationSettings [data-page-size-preset].active{background:var(--primary,#e83282);color:#fff;border-color:transparent}
+#customerPaginationSettings .customer-page-size-help{margin-top:9px;margin-bottom:0}
+
+
+/* ===== AIPP V6.1.24 - CARRIER BRAND LOGOS ===== */
+.carrier-logo{display:inline-block;width:auto;height:18px;max-width:78px;object-fit:contain;vertical-align:-4px;margin-right:3px;border-radius:3px;background:#fff}
+.carrier-pill{display:inline-flex!important;align-items:center;gap:3px;min-height:27px;padding:4px 8px!important}
+.carrier-pill .carrier-logo{height:17px;max-width:72px;margin-right:1px}
+.phone-class .mini-pill .carrier-logo{height:17px;max-width:72px}
+.aipp-cc-person .carrier-logo,.aipp-dense-info .carrier-logo{height:15px;max-width:64px;vertical-align:-3px;margin:0 2px}
+.bulk-customer-row .carrier-logo{height:14px;max-width:58px;vertical-align:-3px}
+body.pp-dark .carrier-logo{background:#fff;border-radius:4px;padding:1px 3px}
+@media(max-width:430px){.carrier-logo{height:16px;max-width:68px}.carrier-pill .carrier-logo{height:16px;max-width:66px}}
